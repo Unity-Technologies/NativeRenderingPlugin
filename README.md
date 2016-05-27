@@ -10,4 +10,4 @@ Just like with most other samples, the license is MIT/X11.
 
 ### Overview of examples
 
-* [NativeRenderingPlugin](NativeRenderingPlugin/README.md) - C++ rendering plugin example, for the [native plugin interface manual](http://docs.unity3d.com/Manual/NativePluginInterface.html).
+* [NativeRenderingPlugin](NativeRenderingPlugin) - C++ rendering plugin example, for the [native plugin interface manual](http://docs.unity3d.com/Manual/NativePluginInterface.html).
