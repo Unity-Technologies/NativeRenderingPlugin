@@ -5,6 +5,9 @@ syntax: glob
 *.VC.opendb
 .vs
 
+xcuserdata
+*.xcworkspace
+
 UnityProject/*.csproj
 UnityProject/*.sln
 UnityProject/Library
