@@ -191,7 +191,7 @@ PlayerSettings:
     m_Automatic: 0
   - m_BuildTarget: MacStandaloneSupport
     m_APIs: 110000000000000010000000
-    m_Automatic: 1
+    m_Automatic: 0
   - m_BuildTarget: LinuxStandaloneSupport
     m_APIs: 1100000000000000
     m_Automatic: 1
