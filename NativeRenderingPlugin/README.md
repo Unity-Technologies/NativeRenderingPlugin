@@ -5,10 +5,14 @@ This sample demonstrates how to render and do other graphics related things from
 
 Unity version required: **5.4** _(might work in earlier versions, not tested)_.
 
-The plugin itself does only two things:
+The plugin itself does very few things:
 
-* Draws a colored rotating triangle in the middle of the screen.
-* Changes texture data of a Unity texture each frame, with an animated "plasma" pattern.
+* **Demonstrates basic plumbing**. How to initialize the graphics API, and how calls from Unity into plugin are made.
+* **Draws a triangle**. A single colored rotating triangle in the middle of the screen. For each backend API, this shows bare basics of how to setup vertex data, setup
+  some shaders or render states, and do a draw call.
+* **Changes Unity texture data**. Unity side passes a texture into the plugin, and the code changes the pixels of it each frame, with an animated "plasma" pattern. This
+  demonstrates how to work with [Texture.GetNativeTexturePtr](http://docs.unity3d.com/ScriptReference/Texture.GetNativeTexturePtr.html).
+
 
 Native code rendering is implemented for several platforms and graphics APIs:
 
