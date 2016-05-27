@@ -51,7 +51,7 @@
 #endif
 
 #if UNITY_IPHONE || UNITY_OSX
-	#define SUPPORT_METAL 0 //@TODO
+	#define SUPPORT_METAL 1
 #endif
 
 

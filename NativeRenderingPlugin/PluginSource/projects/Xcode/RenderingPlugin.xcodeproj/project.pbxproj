@@ -13,6 +13,7 @@
 		2B6899BA1CF8396700C4BA4F /* RenderingPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899B31CF8396700C4BA4F /* RenderingPlugin.cpp */; };
 		2B6899C11CF8399700C4BA4F /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899BD1CF8399700C4BA4F /* glew.c */; };
 		2B6899C91CF83DB000C4BA4F /* RenderingPlugin.bundle in Copy Bundle into Unity project */ = {isa = PBXBuildFile; fileRef = 8D576316048677EA00EA77CD /* RenderingPlugin.bundle */; };
+		2B6899CB1CF8409A00C4BA4F /* RenderAPI_Metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899CA1CF8409A00C4BA4F /* RenderAPI_Metal.mm */; };
 		2BC2A8D5144C433D00D5EF79 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */; };
 		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		2B6899C51CF839A600C4BA4F /* IUnityGraphicsD3D12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityGraphicsD3D12.h; path = ../../source/Unity/IUnityGraphicsD3D12.h; sourceTree = "<group>"; };
 		2B6899C61CF839A600C4BA4F /* IUnityGraphicsMetal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityGraphicsMetal.h; path = ../../source/Unity/IUnityGraphicsMetal.h; sourceTree = "<group>"; };
 		2B6899C71CF839A600C4BA4F /* IUnityInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityInterface.h; path = ../../source/Unity/IUnityInterface.h; sourceTree = "<group>"; };
+		2B6899CA1CF8409A00C4BA4F /* RenderAPI_Metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RenderAPI_Metal.mm; path = ../../source/RenderAPI_Metal.mm; sourceTree = "<group>"; };
 		2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		8D576316048677EA00EA77CD /* RenderingPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RenderingPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				2B6899AC1CF8396700C4BA4F /* RenderAPI_D3D9.cpp */,
 				2B6899AD1CF8396700C4BA4F /* RenderAPI_D3D11.cpp */,
 				2B6899AE1CF8396700C4BA4F /* RenderAPI_D3D12.cpp */,
+				2B6899CA1CF8409A00C4BA4F /* RenderAPI_Metal.mm */,
 				2B6899AF1CF8396700C4BA4F /* RenderAPI_OpenGL2.cpp */,
 				2B6899B01CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp */,
 				2B6899B11CF8396700C4BA4F /* RenderAPI.cpp */,
@@ -216,6 +219,7 @@
 				2B6899B81CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp in Sources */,
 				2B6899B91CF8396700C4BA4F /* RenderAPI.cpp in Sources */,
 				2B6899B71CF8396700C4BA4F /* RenderAPI_OpenGL2.cpp in Sources */,
+				2B6899CB1CF8409A00C4BA4F /* RenderAPI_Metal.mm in Sources */,
 				2B6899C11CF8399700C4BA4F /* glew.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
