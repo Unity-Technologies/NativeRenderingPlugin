@@ -5,6 +5,8 @@ using System.IO;
 
 public class MyBuildPostprocessor
 {
+	// Build postprocessor. Currently only needed on:
+	// - iOS: no dynamic libraries, so plugin source files have to be copied into Xcode project
 	[PostProcessBuild]
 	public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
 	{
@@ -14,9 +16,8 @@ public class MyBuildPostprocessor
 
 	private static void OnPostprocessBuildIOS(string pathToBuiltProject)
 	{
-#if UNITY_IOS //@TODO: UnityEditor.iOS.Xcode not available if iOS editor module is not installed; disable for now
-		// iOS cannot actually use dynamic libraries, so we need to link statically
-		// and for that we need to include files into project
+		// We use UnityEditor.iOS.Xcode API which only exists in iOS editor module
+		#if UNITY_IOS
 
 		string projPath = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
 
@@ -26,26 +27,26 @@ public class MyBuildPostprocessor
 
 		Directory.CreateDirectory(Path.Combine(pathToBuiltProject, "Libraries/Unity"));
 
-		string[] pluginSrcFile = new string[]
+		string[] filesToCopy = new string[]
 		{
-			"../RenderingPlugin/RenderingPlugin.h",
-			"../RenderingPlugin/RenderingPlugin.cpp",
-			"../RenderingPlugin/Metal/RenderingPluginMetal.mm",
-		};
-		string[] pluginXCodeFile = new string[]
-		{
-			"Libraries/RenderingPlugin.h",
-			"Libraries/RenderingPlugin.cpp",
-			"Libraries/RenderingPluginMetal.mm",
+			"PlatformBase.h",
+			"RenderAPI_Metal.mm",
+			"RenderAPI_OpenGLCoreES.cpp",
+			"RenderAPI.cpp",
+			"RenderAPI.h",
+			"RenderingPlugin.cpp",
 		};
 
-		for(int i = 0 ; i < pluginXCodeFile.Length ; ++i)
+		for(int i = 0 ; i < filesToCopy.Length ; ++i)
 		{
-			File.Copy(pluginSrcFile[i], Path.Combine(pathToBuiltProject, pluginXCodeFile[i]), true);
-			proj.AddFileToBuild(target, proj.AddFile(pluginXCodeFile[i], pluginXCodeFile[i]));
+			var srcPath = Path.Combine("../PluginSource/source", filesToCopy[i]);
+			var dstLocalPath = "Libraries/" + filesToCopy[i];
+			var dstPath = Path.Combine(pathToBuiltProject, dstLocalPath);
+			File.Copy(srcPath, dstPath, true);
+			proj.AddFileToBuild(target, proj.AddFile(dstLocalPath, dstLocalPath));
 		}
 
 		File.WriteAllText(projPath, proj.WriteToString());
-#endif
+		#endif // #if UNITY_IOS
 	}
 }

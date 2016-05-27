@@ -158,8 +158,6 @@ void RenderAPI_Metal::CreateResources()
 	}
 
 	// Depth/Stencil state
-	MTLStencilDescriptor* frontStencilDesc = nil;
-	MTLStencilDescriptor* backStencilDesc = nil;
 	MTLDepthStencilDescriptor* depthDesc = [[MTLDepthStencilDescriptorClass alloc] init];
 	depthDesc.depthCompareFunction = MTLCompareFunctionLessEqual;
 	depthDesc.depthWriteEnabled = false;
