@@ -1,0 +1,13 @@
+syntax: glob
+
+*.sdf
+*.vcxproj.user
+*.VC.opendb
+.vs
+
+UnityProject/*.csproj
+UnityProject/*.sln
+UnityProject/Library
+UnityProject/Temp
+
+NativeRenderingPlugin/PluginSource/build
