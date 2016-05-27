@@ -46,6 +46,15 @@ RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 	}
 #	endif // if SUPPORT_OPENGL_LEGACY
 
+#	if SUPPORT_METAL
+	if (apiType == kUnityGfxRendererMetal)
+	{
+		extern RenderAPI* CreateRenderAPI_Metal();
+		return CreateRenderAPI_Metal();
+	}
+#	endif // if SUPPORT_METAL
+
+
 	// Unknown or unsupported graphics API
 	return NULL;
 }
