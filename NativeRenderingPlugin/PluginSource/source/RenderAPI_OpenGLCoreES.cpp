@@ -78,7 +78,9 @@ enum VertexInputs
 
 static const char* kGlesVProgTextGLES2 = VERTEX_SHADER_SRC("\n", "attribute", "varying");
 static const char* kGlesVProgTextGLES3 = VERTEX_SHADER_SRC("#version 300 es\n", "in", "out");
+#if SUPPORT_OPENGL_CORE
 static const char* kGlesVProgTextGLCore = VERTEX_SHADER_SRC("#version 150\n", "in", "out");
+#endif
 
 #undef VERTEX_SHADER_SRC
 
@@ -96,7 +98,9 @@ static const char* kGlesVProgTextGLCore = VERTEX_SHADER_SRC("#version 150\n", "i
 
 static const char* kGlesFShaderTextGLES2 = FRAGMENT_SHADER_SRC("\n", "varying", "\n", "gl_FragColor");
 static const char* kGlesFShaderTextGLES3 = FRAGMENT_SHADER_SRC("#version 300 es\n", "in", "out lowp vec4 fragColor;\n", "fragColor");
+#if SUPPORT_OPENGL_CORE
 static const char* kGlesFShaderTextGLCore = FRAGMENT_SHADER_SRC("#version 150\n", "in", "out lowp vec4 fragColor;\n", "fragColor");
+#endif
 
 #undef FRAGMENT_SHADER_SRC
 
