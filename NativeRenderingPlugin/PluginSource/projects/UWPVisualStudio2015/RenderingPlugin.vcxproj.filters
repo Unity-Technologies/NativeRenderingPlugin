@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Unity">
+      <UniqueIdentifier>{0b7de993-622e-4614-b3bc-a6dd42480fbe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\RenderAPI.cpp" />
+    <ClCompile Include="..\..\source\RenderAPI_D3D9.cpp" />
+    <ClCompile Include="..\..\source\RenderAPI_D3D11.cpp" />
+    <ClCompile Include="..\..\source\RenderAPI_D3D12.cpp" />
+    <ClCompile Include="..\..\source\RenderAPI_OpenGL2.cpp" />
+    <ClCompile Include="..\..\source\RenderAPI_OpenGLCoreES.cpp" />
+    <ClCompile Include="..\..\source\RenderingPlugin.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\Unity\IUnityGraphics.h">
+      <Filter>Unity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Unity\IUnityGraphicsD3D9.h">
+      <Filter>Unity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Unity\IUnityGraphicsD3D11.h">
+      <Filter>Unity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Unity\IUnityGraphicsD3D12.h">
+      <Filter>Unity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Unity\IUnityGraphicsMetal.h">
+      <Filter>Unity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Unity\IUnityInterface.h">
+      <Filter>Unity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\PlatformBase.h" />
+    <ClInclude Include="..\..\source\RenderAPI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\source\RenderAPI_Metal.mm" />
+  </ItemGroup>
+</Project>
