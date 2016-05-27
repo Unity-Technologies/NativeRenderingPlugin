@@ -8,9 +8,12 @@ syntax: glob
 xcuserdata
 *.xcworkspace
 
+WSATestCertificate.pfx*
+
 UnityProject/*.csproj
 UnityProject/*.sln
 UnityProject/Library
 UnityProject/Temp
+UnityProject/UWP
 
 NativeRenderingPlugin/PluginSource/build
