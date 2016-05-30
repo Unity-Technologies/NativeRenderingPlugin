@@ -23,6 +23,9 @@ public:
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
 
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
+	virtual void EndModifyVertexBuffer(void* bufferHandle);
+
 private:
 	IDirect3DDevice9* m_Device;
 	// A dynamic vertex buffer just to demonstrate how to handle D3D9 device resets.
@@ -138,6 +141,27 @@ void RenderAPI_D3D9::EndModifyTexture(void* textureHandle, int textureWidth, int
 
 	// Unlock the texture after modification
 	d3dtex->UnlockRect(0);
+}
+
+
+void* RenderAPI_D3D9::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
+{
+	IDirect3DVertexBuffer9* d3dbuf = (IDirect3DVertexBuffer9*)bufferHandle;
+	assert(d3dbuf);
+	D3DVERTEXBUFFER_DESC desc;
+	d3dbuf->GetDesc(&desc);
+	*outBufferSize = desc.Size;
+	void* locked = NULL;
+	d3dbuf->Lock(0, 0, &locked, D3DLOCK_DISCARD);
+	return locked;
+}
+
+
+void RenderAPI_D3D9::EndModifyVertexBuffer(void* bufferHandle)
+{
+	IDirect3DVertexBuffer9* d3dbuf = (IDirect3DVertexBuffer9*)bufferHandle;
+	assert(d3dbuf);
+	d3dbuf->Unlock();
 }
 
 
