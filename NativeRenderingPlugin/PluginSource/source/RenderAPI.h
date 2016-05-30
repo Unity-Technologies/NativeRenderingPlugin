@@ -2,6 +2,8 @@
 
 #include "Unity/IUnityGraphics.h"
 
+#include <stddef.h>
+
 struct IUnityInterfaces;
 
 
