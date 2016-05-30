@@ -243,4 +243,21 @@ void RenderAPI_Metal::EndModifyTexture(void* textureHandle, int textureWidth, in
 }
 
 
+void* RenderAPI_Metal::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
+{
+	id<MTLBuffer> buf = (__bridge id<MTLBuffer>)bufferHandle;
+	*outBufferSize = [buf length];
+	return [buf contents];
+}
+
+
+void RenderAPI_Metal::EndModifyVertexBuffer(void* bufferHandle)
+{
+#	if UNITY_OSX
+	id<MTLBuffer> buf = (__bridge id<MTLBuffer>)bufferHandle;
+	[m_VertexBuffer didModifyRange:NSMakeRange(0, buf.length)];
+#	endif // if UNITY_OSX
+}
+
+
 #endif // #if SUPPORT_METAL
