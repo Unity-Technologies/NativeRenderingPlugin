@@ -483,8 +483,8 @@ GUIText:
   m_Enabled: 1
   serializedVersion: 3
   m_Text: "A simple scene. The plugin will render a rotating triangle in the middle
-    of it.\r\nIt will also fill the plane texture each frame.\r\nAll done from native
-    code.\r\n<b>Press Play!</b>"
+    of it.\r\nIt will also fill the plane texture each frame.\r\nAnd modify the plane
+    vertex buffer each frame.\nAll done from native code.\r\n<b>Press Play!</b>"
   m_Anchor: 0
   m_Alignment: 0
   m_PixelOffset: {x: 0, y: 0}
