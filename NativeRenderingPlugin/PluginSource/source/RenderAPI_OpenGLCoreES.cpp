@@ -31,6 +31,9 @@ public:
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
 
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
+	virtual void EndModifyVertexBuffer(void* bufferHandle);
+
 private:
 	void CreateResources();
 
@@ -262,5 +265,22 @@ void RenderAPI_OpenGLCoreES::EndModifyTexture(void* textureHandle, int textureWi
 	delete[](unsigned char*)dataPtr;
 }
 
+
+void* RenderAPI_OpenGLCoreES::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
+	GLint size = 0;
+	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+	*outBufferSize = size;
+	void* mapped = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+	return mapped;
+}
+
+
+void RenderAPI_OpenGLCoreES::EndModifyVertexBuffer(void* bufferHandle)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
+	glUnmapBuffer(GL_ARRAY_BUFFER);
+}
 
 #endif // #if SUPPORT_OPENGL_UNIFIED
