@@ -24,6 +24,9 @@ public:
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
 
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
+	virtual void EndModifyVertexBuffer(void* bufferHandle);
+
 private:
 	ID3D12Resource* GetUploadResource(UINT64 size);
 	void CreateResources();
@@ -221,5 +224,17 @@ void RenderAPI_D3D12::EndModifyTexture(void* textureHandle, int textureWidth, in
 	s_D3D12FenceValue = s_D3D12->ExecuteCommandList(s_D3D12CmdList, 1, &resourceState);
 }
 
+
+void* RenderAPI_D3D12::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
+{
+	//@TODO
+	return NULL;
+}
+
+
+void RenderAPI_D3D12::EndModifyVertexBuffer(void* bufferHandle)
+{
+	//@TODO
+}
 
 #endif // #if SUPPORT_D3D12

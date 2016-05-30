@@ -33,9 +33,15 @@ public:
 	//
 	// Returns pointer into the data buffer to write into (or NULL on failure), and pitch in bytes of a single texture row.
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch) = 0;
-
 	// End modifying texture data.
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr) = 0;
+
+
+	// Begin modifying vertex buffer data.
+	// Returns pointer into the data buffer to write into (or NULL on failure), and buffer size.
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize) = 0;
+	// End modifying vertex buffer data.
+	virtual void EndModifyVertexBuffer(void* bufferHandle) = 0;
 };
 
 

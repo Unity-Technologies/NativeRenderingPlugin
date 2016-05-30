@@ -23,6 +23,9 @@ public:
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
 
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
+	virtual void EndModifyVertexBuffer(void* bufferHandle);
+
 private:
 	void CreateResources();
 	void ReleaseResources();
@@ -261,5 +264,34 @@ void RenderAPI_D3D11::EndModifyTexture(void* textureHandle, int textureWidth, in
 	ctx->Release();
 }
 
+
+void* RenderAPI_D3D11::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
+{
+	ID3D11Buffer* d3dbuf = (ID3D11Buffer*)bufferHandle;
+	assert(d3dbuf);
+	D3D11_BUFFER_DESC desc;
+	d3dbuf->GetDesc(&desc);
+	*outBufferSize = desc.ByteWidth;
+
+	ID3D11DeviceContext* ctx = NULL;
+	m_Device->GetImmediateContext(&ctx);
+	D3D11_MAPPED_SUBRESOURCE mapped;
+	ctx->Map(d3dbuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	ctx->Release();
+
+	return mapped.pData;
+}
+
+
+void RenderAPI_D3D11::EndModifyVertexBuffer(void* bufferHandle)
+{
+	ID3D11Buffer* d3dbuf = (ID3D11Buffer*)bufferHandle;
+	assert(d3dbuf);
+
+	ID3D11DeviceContext* ctx = NULL;
+	m_Device->GetImmediateContext(&ctx);
+	ctx->Unmap(d3dbuf, 0);
+	ctx->Release();
+}
 
 #endif // #if SUPPORT_D3D11
