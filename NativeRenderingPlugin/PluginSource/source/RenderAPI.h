@@ -21,6 +21,9 @@ public:
 	// Process general event like initialization, shutdown, device loss/reset etc.
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces) = 0;
 
+	// Is the API using "reversed" (1.0 at near plane, 0.0 at far plane) depth buffer?
+	// Reversed Z is used on modern platforms, and improves depth buffer precision.
+	virtual bool GetUsesReverseZ() = 0;
 
 	// Draw some triangle geometry, using some simple rendering state.
 	// Upon call into our plug-in the render state can be almost completely arbitrary depending
