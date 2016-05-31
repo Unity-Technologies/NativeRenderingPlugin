@@ -82,6 +82,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="..\..\source\RenderingPlugin.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{15519b07-603e-497b-904c-2d42c403519e}</ProjectGuid>
@@ -195,8 +196,7 @@
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -229,8 +229,7 @@ ENDLOCAL
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -263,8 +262,7 @@ ENDLOCAL
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -297,8 +295,7 @@ ENDLOCAL
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -331,8 +328,7 @@ ENDLOCAL
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -365,8 +361,7 @@ ENDLOCAL
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL

@@ -41,6 +41,9 @@
     <ClCompile Include="..\..\source\RenderAPI_OpenGLCoreES.cpp" />
     <ClCompile Include="..\..\source\RenderingPlugin.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\source\RenderingPlugin.def" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F7CFEF5A-54BD-42E8-A59E-54ABAEB4EA9C}</ProjectGuid>
     <RootNamespace>RenderingPlugin</RootNamespace>
@@ -126,6 +129,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -158,6 +162,7 @@ ENDLOCAL
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -193,6 +198,7 @@ ENDLOCAL
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -228,6 +234,7 @@ ENDLOCAL
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
