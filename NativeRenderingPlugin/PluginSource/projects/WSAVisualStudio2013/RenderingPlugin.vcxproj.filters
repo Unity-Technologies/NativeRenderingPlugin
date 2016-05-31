@@ -38,5 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\RenderAPI_Metal.mm" />
+    <None Include="..\..\source\RenderingPlugin.def" />
   </ItemGroup>
 </Project>
