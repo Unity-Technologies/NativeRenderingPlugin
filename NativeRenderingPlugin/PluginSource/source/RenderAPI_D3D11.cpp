@@ -18,6 +18,8 @@ public:
 
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 
+	virtual bool GetUsesReverseZ() { return (int)m_Device->GetFeatureLevel() >= (int)D3D_FEATURE_LEVEL_10_0; }
+
 	virtual void DrawSimpleTriangles(const float worldMatrix[16], int triangleCount, const void* verticesFloat3Byte4);
 
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
@@ -183,7 +185,7 @@ void RenderAPI_D3D11::CreateResources()
 	memset(&dsdesc, 0, sizeof(dsdesc));
 	dsdesc.DepthEnable = TRUE;
 	dsdesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	dsdesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	dsdesc.DepthFunc = GetUsesReverseZ() ? D3D11_COMPARISON_GREATER_EQUAL : D3D11_COMPARISON_LESS_EQUAL;
 	m_Device->CreateDepthStencilState(&dsdesc, &m_DepthState);
 
 	D3D11_BLEND_DESC bdesc;

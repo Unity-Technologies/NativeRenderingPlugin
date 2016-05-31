@@ -170,11 +170,13 @@ static void DrawColoredTriangle()
 	float phi = g_Time; // time set externally from Unity script
 	float cosPhi = cosf(phi);
 	float sinPhi = sinf(phi);
+	float depth = 0.7f;
+	float finalDepth = s_CurrentAPI->GetUsesReverseZ() ? 1.0f - depth : depth;
 	float worldMatrix[16] = {
 		cosPhi,-sinPhi,0,0,
 		sinPhi,cosPhi,0,0,
 		0,0,1,0,
-		0,0,0.7f,1,
+		0,0,finalDepth,1,
 	};
 
 	s_CurrentAPI->DrawSimpleTriangles(worldMatrix, 1, verts);
