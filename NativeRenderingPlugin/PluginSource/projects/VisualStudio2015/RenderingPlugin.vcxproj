@@ -42,6 +42,9 @@
     <ClCompile Include="..\..\source\RenderingPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\source\RenderingPlugin.def" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\source\RenderAPI_Metal.mm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -134,6 +137,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -166,6 +170,7 @@ ENDLOCAL
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -201,6 +206,7 @@ ENDLOCAL
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
@@ -236,6 +242,7 @@ ENDLOCAL
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ModuleDefinitionFile>../../source/RenderingPlugin.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>SETLOCAL
