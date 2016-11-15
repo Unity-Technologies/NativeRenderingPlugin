@@ -12,7 +12,7 @@ public class UseRenderingPlugin : MonoBehaviour
 	// For this example, we'll call into plugin's SetTimeFromUnity
 	// function and pass the current time so the plugin can animate.
 
-#if UNITY_IPHONE && !UNITY_EDITOR
+#if (UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 #else
 	[DllImport ("RenderingPlugin")]
@@ -22,7 +22,7 @@ public class UseRenderingPlugin : MonoBehaviour
 
 	// We'll also pass native pointer to a texture in Unity.
 	// The plugin will fill texture data from native code.
-#if UNITY_IPHONE && !UNITY_EDITOR
+#if (UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 #else
 	[DllImport ("RenderingPlugin")]
@@ -30,16 +30,23 @@ public class UseRenderingPlugin : MonoBehaviour
 	private static extern void SetTextureFromUnity(System.IntPtr texture, int w, int h);
 
 
-#if UNITY_IPHONE && !UNITY_EDITOR
+#if (UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 #else
 	[DllImport("RenderingPlugin")]
 #endif
 	private static extern IntPtr GetRenderEventFunc();
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+	[DllImport ("__Internal")]
+	private static extern void RegisterPlugin();
+#endif
 
 	IEnumerator Start()
 	{
+#if UNITY_WEBGL && !UNITY_EDITOR
+		RegisterPlugin();
+#endif
 		CreateTextureAndPassToPlugin();
 		yield return StartCoroutine("CallPluginAtEndOfFrames");
 	}

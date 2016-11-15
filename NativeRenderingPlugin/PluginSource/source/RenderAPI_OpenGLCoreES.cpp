@@ -11,7 +11,7 @@
 #include <assert.h>
 #if UNITY_IPHONE
 #	include <OpenGLES/ES2/gl.h>
-#elif UNITY_ANDROID
+#elif UNITY_ANDROID || UNITY_WEBGL
 #	include <GLES2/gl2.h>
 #else
 #	include "GLEW/glew.h"
