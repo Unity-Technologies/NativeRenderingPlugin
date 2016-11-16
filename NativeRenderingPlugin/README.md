@@ -20,6 +20,7 @@ Native code rendering is implemented for several platforms and graphics APIs:
 * Mac OS X (Metal, OpenGL Core, OpenGL Legacy)
 * Linux (OpenGL Core, OpenGL Legacy)
 * Windows Store, UWP (Win10) and WSA (Win8.1) variants (D3D11, D3D12)
+* WebGL (requires Unity 5.5+)
 * ...more platforms (iOS, Android) coming soon, we just did not get around to adding project files yet.
 
 Code is organized as follows:
