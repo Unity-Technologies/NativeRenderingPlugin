@@ -20,10 +20,15 @@ public:
 	
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 	
+	virtual bool GetUsesReverseZ() { return true; }
+
 	virtual void DrawSimpleTriangles(const float worldMatrix[16], int triangleCount, const void* verticesFloat3Byte4);
 	
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
+
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
+	virtual void EndModifyVertexBuffer(void* bufferHandle);
 	
 private:
 	void CreateResources();
@@ -237,6 +242,23 @@ void RenderAPI_Metal::EndModifyTexture(void* textureHandle, int textureWidth, in
 	// Update texture data, and free the memory buffer
 	[tex replaceRegion:MTLRegionMake3D(0,0,0, textureWidth,textureHeight,1) mipmapLevel:0 withBytes:dataPtr bytesPerRow:rowPitch];
 	delete[](unsigned char*)dataPtr;
+}
+
+
+void* RenderAPI_Metal::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
+{
+	id<MTLBuffer> buf = (__bridge id<MTLBuffer>)bufferHandle;
+	*outBufferSize = [buf length];
+	return [buf contents];
+}
+
+
+void RenderAPI_Metal::EndModifyVertexBuffer(void* bufferHandle)
+{
+#	if UNITY_OSX
+	id<MTLBuffer> buf = (__bridge id<MTLBuffer>)bufferHandle;
+	[m_VertexBuffer didModifyRange:NSMakeRange(0, buf.length)];
+#	endif // if UNITY_OSX
 }
 
 

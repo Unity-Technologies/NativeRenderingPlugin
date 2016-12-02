@@ -17,10 +17,15 @@ public:
 
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 
+	virtual bool GetUsesReverseZ() { return false; }
+
 	virtual void DrawSimpleTriangles(const float worldMatrix[16], int triangleCount, const void* verticesFloat3Byte4);
 
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
+
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
+	virtual void EndModifyVertexBuffer(void* bufferHandle);
 };
 
 
@@ -99,5 +104,22 @@ void RenderAPI_OpenGL2::EndModifyTexture(void* textureHandle, int textureWidth, 
 	delete[](unsigned char*)dataPtr;
 }
 
+
+void* RenderAPI_OpenGL2::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
+	GLint size = 0;
+	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+	*outBufferSize = size;
+	void* mapped = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+	return mapped;
+}
+
+
+void RenderAPI_OpenGL2::EndModifyVertexBuffer(void* bufferHandle)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
+	glUnmapBuffer(GL_ARRAY_BUFFER);
+}
 
 #endif // #if SUPPORT_OPENGL_LEGACY
