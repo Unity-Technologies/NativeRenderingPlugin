@@ -2,6 +2,8 @@
 
 #include "Unity/IUnityGraphics.h"
 
+#include <stddef.h>
+
 struct IUnityInterfaces;
 
 
@@ -19,6 +21,9 @@ public:
 	// Process general event like initialization, shutdown, device loss/reset etc.
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces) = 0;
 
+	// Is the API using "reversed" (1.0 at near plane, 0.0 at far plane) depth buffer?
+	// Reversed Z is used on modern platforms, and improves depth buffer precision.
+	virtual bool GetUsesReverseZ() = 0;
 
 	// Draw some triangle geometry, using some simple rendering state.
 	// Upon call into our plug-in the render state can be almost completely arbitrary depending
@@ -33,9 +38,15 @@ public:
 	//
 	// Returns pointer into the data buffer to write into (or NULL on failure), and pitch in bytes of a single texture row.
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch) = 0;
-
 	// End modifying texture data.
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr) = 0;
+
+
+	// Begin modifying vertex buffer data.
+	// Returns pointer into the data buffer to write into (or NULL on failure), and buffer size.
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize) = 0;
+	// End modifying vertex buffer data.
+	virtual void EndModifyVertexBuffer(void* bufferHandle) = 0;
 };
 
 
