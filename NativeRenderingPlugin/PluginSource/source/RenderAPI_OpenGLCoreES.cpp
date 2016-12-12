@@ -267,22 +267,27 @@ void RenderAPI_OpenGLCoreES::EndModifyTexture(void* textureHandle, int textureWi
 	delete[](unsigned char*)dataPtr;
 }
 
-
 void* RenderAPI_OpenGLCoreES::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
 {
+#	if SUPPORT_OPENGL_ES
+	return 0;
+#	else
 	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
 	GLint size = 0;
 	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
 	*outBufferSize = size;
 	void* mapped = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 	return mapped;
+#	endif
 }
 
 
 void RenderAPI_OpenGLCoreES::EndModifyVertexBuffer(void* bufferHandle)
 {
+#	if !SUPPORT_OPENGL_ES
 	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
 	glUnmapBuffer(GL_ARRAY_BUFFER);
+#	endif
 }
 
 #endif // #if SUPPORT_OPENGL_UNIFIED

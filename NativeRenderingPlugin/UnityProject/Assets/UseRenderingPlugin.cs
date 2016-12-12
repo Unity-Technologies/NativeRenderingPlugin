@@ -32,7 +32,7 @@ public class UseRenderingPlugin : MonoBehaviour
 	// We'll pass native pointer to the mesh vertex buffer.
 	// Also passing source unmodified mesh data.
 	// The plugin will fill vertex data from native code.
-#if UNITY_IPHONE && !UNITY_EDITOR
+#if (UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 #else
 	[DllImport ("RenderingPlugin")]
