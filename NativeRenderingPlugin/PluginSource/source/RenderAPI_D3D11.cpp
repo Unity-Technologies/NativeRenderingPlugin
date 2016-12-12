@@ -18,10 +18,15 @@ public:
 
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 
+	virtual bool GetUsesReverseZ() { return (int)m_Device->GetFeatureLevel() >= (int)D3D_FEATURE_LEVEL_10_0; }
+
 	virtual void DrawSimpleTriangles(const float worldMatrix[16], int triangleCount, const void* verticesFloat3Byte4);
 
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
+
+	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
+	virtual void EndModifyVertexBuffer(void* bufferHandle);
 
 private:
 	void CreateResources();
@@ -180,7 +185,7 @@ void RenderAPI_D3D11::CreateResources()
 	memset(&dsdesc, 0, sizeof(dsdesc));
 	dsdesc.DepthEnable = TRUE;
 	dsdesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	dsdesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	dsdesc.DepthFunc = GetUsesReverseZ() ? D3D11_COMPARISON_GREATER_EQUAL : D3D11_COMPARISON_LESS_EQUAL;
 	m_Device->CreateDepthStencilState(&dsdesc, &m_DepthState);
 
 	D3D11_BLEND_DESC bdesc;
@@ -261,5 +266,34 @@ void RenderAPI_D3D11::EndModifyTexture(void* textureHandle, int textureWidth, in
 	ctx->Release();
 }
 
+
+void* RenderAPI_D3D11::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
+{
+	ID3D11Buffer* d3dbuf = (ID3D11Buffer*)bufferHandle;
+	assert(d3dbuf);
+	D3D11_BUFFER_DESC desc;
+	d3dbuf->GetDesc(&desc);
+	*outBufferSize = desc.ByteWidth;
+
+	ID3D11DeviceContext* ctx = NULL;
+	m_Device->GetImmediateContext(&ctx);
+	D3D11_MAPPED_SUBRESOURCE mapped;
+	ctx->Map(d3dbuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	ctx->Release();
+
+	return mapped.pData;
+}
+
+
+void RenderAPI_D3D11::EndModifyVertexBuffer(void* bufferHandle)
+{
+	ID3D11Buffer* d3dbuf = (ID3D11Buffer*)bufferHandle;
+	assert(d3dbuf);
+
+	ID3D11DeviceContext* ctx = NULL;
+	m_Device->GetImmediateContext(&ctx);
+	ctx->Unmap(d3dbuf, 0);
+	ctx->Release();
+}
 
 #endif // #if SUPPORT_D3D11
