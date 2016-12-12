@@ -3,7 +3,11 @@
 This sample demonstrates how to render and do other graphics related things from a C++ plugin, via a
 [native plugin interface](http://docs.unity3d.com/Manual/NativePluginInterface.html).
 
-Unity version required: **5.4** _(might work in earlier versions, not tested)_.
+Unity versions:
+
+* **5.5** use tip of default branch.
+* 5.4: use `unity-5.4` tag.
+* Earlier versions: may or might not work, not tested.
 
 The plugin itself does very few things:
 
