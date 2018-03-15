@@ -13,21 +13,13 @@ RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 	}
 #	endif // if SUPPORT_D3D11
 
-#	if SUPPORT_D3D9
-	if (apiType == kUnityGfxRendererD3D9)
-	{
-		extern RenderAPI* CreateRenderAPI_D3D9();
-		return CreateRenderAPI_D3D9();
-	}
-#	endif // if SUPPORT_D3D9
-
 #	if SUPPORT_D3D12
 	if (apiType == kUnityGfxRendererD3D12)
 	{
 		extern RenderAPI* CreateRenderAPI_D3D12();
 		return CreateRenderAPI_D3D12();
 	}
-#	endif // if SUPPORT_D3D9
+#	endif // if SUPPORT_D3D12
 
 
 #	if SUPPORT_OPENGL_UNIFIED

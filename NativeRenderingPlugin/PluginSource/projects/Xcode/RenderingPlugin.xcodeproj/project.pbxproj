@@ -34,7 +34,6 @@
 /* Begin PBXFileReference section */
 		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		2B6899AB1CF8396700C4BA4F /* PlatformBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlatformBase.h; path = ../../source/PlatformBase.h; sourceTree = "<group>"; };
-		2B6899AC1CF8396700C4BA4F /* RenderAPI_D3D9.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D9.cpp; path = ../../source/RenderAPI_D3D9.cpp; sourceTree = "<group>"; };
 		2B6899AD1CF8396700C4BA4F /* RenderAPI_D3D11.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D11.cpp; path = ../../source/RenderAPI_D3D11.cpp; sourceTree = "<group>"; };
 		2B6899AE1CF8396700C4BA4F /* RenderAPI_D3D12.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D12.cpp; path = ../../source/RenderAPI_D3D12.cpp; sourceTree = "<group>"; };
 		2B6899B01CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_OpenGLCoreES.cpp; path = ../../source/RenderAPI_OpenGLCoreES.cpp; sourceTree = "<group>"; };
@@ -104,7 +103,6 @@
 				2B6899BB1CF8397C00C4BA4F /* GLEW */,
 				2B6899BC1CF8398200C4BA4F /* Unity */,
 				2B6899AB1CF8396700C4BA4F /* PlatformBase.h */,
-				2B6899AC1CF8396700C4BA4F /* RenderAPI_D3D9.cpp */,
 				2B6899AD1CF8396700C4BA4F /* RenderAPI_D3D11.cpp */,
 				2B6899AE1CF8396700C4BA4F /* RenderAPI_D3D12.cpp */,
 				2B6899CA1CF8409A00C4BA4F /* RenderAPI_Metal.mm */,
