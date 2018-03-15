@@ -13,9 +13,7 @@
 @protocol MTLCommandBuffer;
 @protocol MTLCommandEncoder;
 @protocol MTLTexture;
-
-struct RenderSurfaceBase;
-typedef struct RenderSurfaceBase* UnityRenderBuffer;
+@class MTLRenderPassDescriptor;
 
 // Should only be used on the rendering thread unless noted otherwise.
 UNITY_DECLARE_INTERFACE(IUnityGraphicsMetal)
@@ -31,6 +29,9 @@ UNITY_DECLARE_INTERFACE(IUnityGraphicsMetal)
     // or you might want to create your own encoder.
     // In that case you should end unity's encoder before creating your own and end yours before returning control to unity
     void(UNITY_INTERFACE_API * EndCurrentCommandEncoder)();
+
+    // returns MTLRenderPassDescriptor used to create current MTLCommandEncoder
+    MTLRenderPassDescriptor* (UNITY_INTERFACE_API * CurrentRenderPassDescriptor)();
 
     // converting trampoline UnityRenderBufferHandle into native RenderBuffer
     UnityRenderBuffer(UNITY_INTERFACE_API * RenderBufferFromHandle)(void* bufferHandle);

@@ -4,6 +4,9 @@
     #include <stdbool.h>
 #endif
 
+struct RenderSurfaceBase;
+typedef struct RenderSurfaceBase* UnityRenderBuffer;
+
 typedef struct UnityGraphicsD3D12ResourceState UnityGraphicsD3D12ResourceState;
 struct UnityGraphicsD3D12ResourceState
 {
@@ -19,6 +22,28 @@ struct UnityGraphicsD3D12PhysicalVideoMemoryControlValues // all values in bytes
     UINT64 systemMemoryThreshold; // If free physical video memory drops below this threshold, resources will be allocated in system memory. [default = 64MB]
     UINT64 residencyThreshold;    // Minimum free physical video memory needed to start bringing evicted resources back after shrunken video memory budget expands again. [default = 128MB]
 };
+
+// Should only be used on the rendering/submission thread.
+UNITY_DECLARE_INTERFACE(IUnityGraphicsD3D12v5)
+{
+    ID3D12Device* (UNITY_INTERFACE_API * GetDevice)();
+
+    ID3D12Fence* (UNITY_INTERFACE_API * GetFrameFence)();
+    // Returns the value set on the frame fence once the current frame completes or the GPU is flushed
+    UINT64(UNITY_INTERFACE_API * GetNextFrameFenceValue)();
+
+    //     Executes a given command list on a worker thread.
+    //    [Optional] Declares expected and post-execution resource states.
+    //     Returns the fence value.
+    UINT64(UNITY_INTERFACE_API * ExecuteCommandList)(ID3D12GraphicsCommandList * commandList, int stateCount, UnityGraphicsD3D12ResourceState * states);
+
+    void(UNITY_INTERFACE_API * SetPhysicalVideoMemoryControlValues)(const UnityGraphicsD3D12PhysicalVideoMemoryControlValues * memInfo);
+
+    ID3D12CommandQueue* (UNITY_INTERFACE_API * GetCommandQueue)();
+
+    ID3D12Resource* (UNITY_INTERFACE_API * TextureFromRenderBuffer)(UnityRenderBuffer * rb);
+};
+UNITY_REGISTER_INTERFACE_GUID(0xF5C8D8A37D37BC42ULL, 0xB02DFE93B5064A27ULL, IUnityGraphicsD3D12v5)
 
 // Should only be used on the rendering/submission thread.
 UNITY_DECLARE_INTERFACE(IUnityGraphicsD3D12v4)
