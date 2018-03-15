@@ -5,8 +5,8 @@ This sample demonstrates how to render and do other graphics related things from
 
 Unity versions:
 
-* **5.5** use tip of default branch.
-* 5.4: use `unity-5.4` tag.
+* **2018.1** use tip of default branch.
+* 5.4, 5.5, 4.6: use corresponding `unity-x.x` tag.
 * Earlier versions: may or might not work, not tested.
 
 The plugin itself does very few things:
@@ -20,11 +20,11 @@ The plugin itself does very few things:
 
 Native code rendering is implemented for several platforms and graphics APIs:
 
-* Windows (D3D9, D3D11, D3D12, OpenGL Core)
-* Mac OS X (Metal, OpenGL Core, OpenGL Legacy)
-* Linux (OpenGL Core, OpenGL Legacy)
-* Windows Store, UWP (Win10) and WSA (Win8.1) variants (D3D11, D3D12)
-* WebGL (requires Unity 5.5+)
+* Windows (D3D11, D3D12, OpenGL Core)
+* Mac OS X (Metal, OpenGL Core)
+* Linux (OpenGL Core)
+* Windows Store aka UWP (D3D11, D3D12)
+* WebGL
 * ...more platforms (iOS, Android) coming soon, we just did not get around to adding project files yet.
 
 Code is organized as follows:
