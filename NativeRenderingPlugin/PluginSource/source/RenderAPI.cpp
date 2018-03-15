@@ -38,14 +38,6 @@ RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 	}
 #	endif // if SUPPORT_OPENGL_UNIFIED
 
-#	if SUPPORT_OPENGL_LEGACY
-	if (apiType == kUnityGfxRendererOpenGL)
-	{
-		extern RenderAPI* CreateRenderAPI_OpenGL2();
-		return CreateRenderAPI_OpenGL2();
-	}
-#	endif // if SUPPORT_OPENGL_LEGACY
-
 #	if SUPPORT_METAL
 	if (apiType == kUnityGfxRendererMetal)
 	{
