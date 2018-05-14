@@ -17,22 +17,22 @@ class RenderAPI_Metal : public RenderAPI
 public:
 	RenderAPI_Metal();
 	virtual ~RenderAPI_Metal() { }
-	
+
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
-	
+
 	virtual bool GetUsesReverseZ() { return true; }
 
 	virtual void DrawSimpleTriangles(const float worldMatrix[16], int triangleCount, const void* verticesFloat3Byte4);
-	
+
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
 
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
-	
+
 private:
 	void CreateResources();
-	
+
 private:
 	IUnityGraphicsMetal*	m_MetalGraphics;
 	id<MTLBuffer>			m_VertexBuffer;
@@ -93,7 +93,7 @@ void RenderAPI_Metal::CreateResources()
 {
 	id<MTLDevice> metalDevice = m_MetalGraphics->MetalDevice();
 	NSError* error = nil;
-	
+
 	// Create shaders
 	NSString* srcStr = [[NSString alloc] initWithBytes:kShaderSource length:sizeof(kShaderSource) encoding:NSASCIIStringEncoding];
 	id<MTLLibrary> shaderLibrary = [metalDevice newLibraryWithSource:srcStr options:nil error:&error];
@@ -103,24 +103,24 @@ void RenderAPI_Metal::CreateResources()
 		NSString* reason	= [error localizedFailureReason];
 		::fprintf(stderr, "%s\n%s\n\n", desc ? [desc UTF8String] : "<unknown>", reason ? [reason UTF8String] : "");
 	}
-	
+
 	id<MTLFunction> vertexFunction = [shaderLibrary newFunctionWithName:@"vertexMain"];
 	id<MTLFunction> fragmentFunction = [shaderLibrary newFunctionWithName:@"fragmentMain"];
 
 
 	// Vertex / Constant buffers
-	
+
 #	if UNITY_OSX
 	MTLResourceOptions bufferOptions = MTLResourceCPUCacheModeDefaultCache | MTLResourceStorageModeManaged;
 #	else
 	MTLResourceOptions bufferOptions = MTLResourceOptionCPUCacheModeDefault;
 #	endif
-	
+
 	m_VertexBuffer = [metalDevice newBufferWithLength:1024 options:bufferOptions];
 	m_VertexBuffer.label = @"PluginVB";
 	m_ConstantBuffer = [metalDevice newBufferWithLength:16*sizeof(float) options:bufferOptions];
 	m_ConstantBuffer.label = @"PluginCB";
-	
+
 	// Vertex layout
 	MTLVertexDescriptor* vertexDesc = [MTLVertexDescriptorClass vertexDescriptor];
 	vertexDesc.attributes[0].format			= MTLVertexFormatFloat3;
@@ -132,13 +132,13 @@ void RenderAPI_Metal::CreateResources()
 	vertexDesc.layouts[1].stride			= kVertexSize;
 	vertexDesc.layouts[1].stepFunction		= MTLVertexStepFunctionPerVertex;
 	vertexDesc.layouts[1].stepRate			= 1;
-	
+
 	// Pipeline
-	
+
 	MTLRenderPipelineDescriptor* pipeDesc = [[MTLRenderPipelineDescriptorClass alloc] init];
 	// Let's assume we're rendering into BGRA8Unorm...
 	pipeDesc.colorAttachments[0].pixelFormat= MTLPixelFormatBGRA8Unorm;
-	
+
 	// OSX/tvOS insist on more modern enums
 #if (UNITY_IPHONE && TARGET_OS_TV) || UNITY_OSX
 	pipeDesc.depthAttachmentPixelFormat		= MTLPixelFormatDepth32Float_Stencil8;
@@ -147,14 +147,14 @@ void RenderAPI_Metal::CreateResources()
 	pipeDesc.depthAttachmentPixelFormat		= MTLPixelFormatDepth32Float;
 	pipeDesc.stencilAttachmentPixelFormat	= MTLPixelFormatStencil8;
 #endif
-	
+
 	pipeDesc.sampleCount = 1;
 	pipeDesc.colorAttachments[0].blendingEnabled = NO;
-	
+
 	pipeDesc.vertexFunction		= vertexFunction;
 	pipeDesc.fragmentFunction	= fragmentFunction;
 	pipeDesc.vertexDescriptor	= vertexDesc;
-	
+
 	m_Pipeline = [metalDevice newRenderPipelineStateWithDescriptor:pipeDesc error:&error];
 	if (error != nil)
 	{
@@ -164,7 +164,7 @@ void RenderAPI_Metal::CreateResources()
 
 	// Depth/Stencil state
 	MTLDepthStencilDescriptor* depthDesc = [[MTLDepthStencilDescriptorClass alloc] init];
-	depthDesc.depthCompareFunction = MTLCompareFunctionLessEqual;
+	depthDesc.depthCompareFunction = GetUsesReverseZ() ? MTLCompareFunctionGreaterEqual : MTLCompareFunctionLessEqual;
 	depthDesc.depthWriteEnabled = false;
 	m_DepthStencil = [metalDevice newDepthStencilStateWithDescriptor:depthDesc];
 }
@@ -184,7 +184,7 @@ void RenderAPI_Metal::ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInt
 		MTLVertexDescriptorClass			= [metalBundle classNamed:@"MTLVertexDescriptor"];
 		MTLRenderPipelineDescriptorClass	= [metalBundle classNamed:@"MTLRenderPipelineDescriptor"];
 		MTLDepthStencilDescriptorClass		= [metalBundle classNamed:@"MTLDepthStencilDescriptor"];
-		
+
 		CreateResources();
 	}
 	else if (type == kUnityGfxDeviceEventShutdown)
@@ -204,12 +204,12 @@ void RenderAPI_Metal::DrawSimpleTriangles(const float worldMatrix[16], int trian
 
 	::memcpy(m_VertexBuffer.contents, verticesFloat3Byte4, vbSize);
 	::memcpy(m_ConstantBuffer.contents, worldMatrix, cbSize);
-	
+
 #if UNITY_OSX
 	[m_VertexBuffer didModifyRange:NSMakeRange(0, vbSize)];
 	[m_ConstantBuffer didModifyRange:NSMakeRange(0, cbSize)];
 #endif
-	
+
 	id<MTLRenderCommandEncoder> cmd = (id<MTLRenderCommandEncoder>)m_MetalGraphics->CurrentCommandEncoder();
 
 	// Setup rendering state
@@ -257,7 +257,7 @@ void RenderAPI_Metal::EndModifyVertexBuffer(void* bufferHandle)
 {
 #	if UNITY_OSX
 	id<MTLBuffer> buf = (__bridge id<MTLBuffer>)bufferHandle;
-	[m_VertexBuffer didModifyRange:NSMakeRange(0, buf.length)];
+	[buf didModifyRange:NSMakeRange(0, buf.length)];
 #	endif // if UNITY_OSX
 }
 
