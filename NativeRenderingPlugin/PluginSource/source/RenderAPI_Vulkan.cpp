@@ -6,6 +6,7 @@
 #include <string.h>
 #include <map>
 #include <vector>
+#include <math.h>
 
 // This plugin does not link to the Vulkan loader, easier to support multiple APIs and systems that don't have Vulkan support
 #define VK_NO_PROTOTYPES
