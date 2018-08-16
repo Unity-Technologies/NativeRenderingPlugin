@@ -38,6 +38,13 @@ RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 	}
 #	endif // if SUPPORT_METAL
 
+#	if SUPPORT_VULKAN
+	if (apiType == kUnityGfxRendererVulkan)
+	{
+		extern RenderAPI* CreateRenderAPI_Vulkan();
+		return CreateRenderAPI_Vulkan();
+	}
+#	endif // if SUPPORT_VULKAN
 
 	// Unknown or unsupported graphics API
 	return NULL;
