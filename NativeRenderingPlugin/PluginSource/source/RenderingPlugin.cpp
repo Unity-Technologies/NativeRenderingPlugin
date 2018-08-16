@@ -96,6 +96,14 @@ extern "C" void	UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnit
 	s_Graphics = s_UnityInterfaces->Get<IUnityGraphics>();
 	s_Graphics->RegisterDeviceEventCallback(OnGraphicsDeviceEvent);
 	
+#if SUPPORT_VULKAN
+	if (s_Graphics->GetRenderer() == kUnityGfxRendererNull)
+	{
+		extern void RenderAPI_Vulkan_OnPluginLoad(IUnityInterfaces*);
+		RenderAPI_Vulkan_OnPluginLoad(unityInterfaces);
+	}
+#endif // SUPPORT_VULKAN
+
 	// Run OnGraphicsDeviceEvent(initialize) manually on plugin load
 	OnGraphicsDeviceEvent(kUnityGfxDeviceEventInitialize);
 }

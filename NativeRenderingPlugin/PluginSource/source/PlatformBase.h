@@ -21,7 +21,9 @@
 	#else
 		#define UNITY_OSX 1
 	#endif
-#elif defined(UNITY_METRO) || defined(UNITY_ANDROID) || defined(UNITY_LINUX) || defined(UNITY_WEBGL)
+#elif defined(__ANDROID__)
+	#define UNITY_ANDROID 1
+#elif defined(UNITY_METRO) || defined(UNITY_LINUX) || defined(UNITY_WEBGL)
 	// these are defined externally
 #elif defined(__EMSCRIPTEN__)
 	// this is already defined in Unity 5.6
@@ -43,9 +45,15 @@
 	#define SUPPORT_D3D12 0 //@TODO: enable by default? comment this out if you don't have D3D12 header/library files
 	#define SUPPORT_OPENGL_UNIFIED 1
 	#define SUPPORT_OPENGL_CORE 1
+	#define SUPPORT_VULKAN 0 // Requires Vulkan SDK to be installed
 #elif UNITY_IPHONE || UNITY_ANDROID || UNITY_WEBGL
-	#define SUPPORT_OPENGL_UNIFIED 1
-	#define SUPPORT_OPENGL_ES 1
+	#ifndef SUPPORT_OPENGL_ES
+		#define SUPPORT_OPENGL_ES 1
+	#endif
+	#define SUPPORT_OPENGL_UNIFIED SUPPORT_OPENGL_ES
+	#ifndef SUPPORT_VULKAN
+		#define SUPPORT_VULKAN 0
+	#endif
 #elif UNITY_OSX || UNITY_LINUX
 	#define SUPPORT_OPENGL_UNIFIED 1
 	#define SUPPORT_OPENGL_CORE 1
