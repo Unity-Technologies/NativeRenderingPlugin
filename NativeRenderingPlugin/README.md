@@ -25,7 +25,8 @@ Native code rendering is implemented for several platforms and graphics APIs:
 * Linux (OpenGL Core)
 * Windows Store aka UWP (D3D11, D3D12)
 * WebGL
-* ...more platforms (iOS, Android) coming soon, we just did not get around to adding project files yet.
+* Android (OpenGL ES 2.0)
+* ...more platforms (iOS, ...) coming soon, we just did not get around to adding project files yet.
 
 Code is organized as follows:
 
