@@ -17,3 +17,5 @@ UnityProject/Temp
 UnityProject/UWP
 
 NativeRenderingPlugin/PluginSource/build
+NativeRenderingPlugin/PluginSource/projects/Android/libs/*
+NativeRenderingPlugin/PluginSource/projects/Android/obj/*
