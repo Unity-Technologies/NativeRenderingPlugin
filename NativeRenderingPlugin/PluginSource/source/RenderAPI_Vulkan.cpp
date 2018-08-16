@@ -859,7 +859,7 @@ void RenderAPI_Vulkan::DrawSimpleTriangles(const float worldMatrix[16], int tria
         if (!CreateVulkanBuffer(16 * 3 * triangleCount, &buffer, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT))
             return;
 
-        memcpy(buffer.mapped, verticesFloat3Byte4, buffer.sizeInBytes);
+        memcpy(buffer.mapped, verticesFloat3Byte4, static_cast<size_t>(buffer.sizeInBytes));
         if (!(buffer.deviceMemoryFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
         {
             VkMappedMemoryRange range;
