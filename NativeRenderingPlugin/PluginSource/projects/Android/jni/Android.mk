@@ -5,6 +5,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := RenderingPlugin
 LOCAL_C_INCLUDES += $(SRC_DIR)
 LOCAL_LDLIBS := -llog
+LOCAL_ARM_MODE := arm
 
 LOCAL_SRC_FILES += $(SRC_DIR)/RenderAPI.cpp
 LOCAL_SRC_FILES += $(SRC_DIR)/RenderingPlugin.cpp
