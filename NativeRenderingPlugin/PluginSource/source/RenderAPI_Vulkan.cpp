@@ -37,19 +37,7 @@
     apply(vkCmdPushConstants); \
     apply(vkCmdBindVertexBuffers); \
     apply(vkDestroyPipeline); \
-    apply(vkDestroyPipelineLayout); \
-    apply(vkGetSwapchainImagesKHR); \
-    apply(vkAcquireNextImageKHR); \
-    apply(vkCreateSwapchainKHR); \
-    apply(vkDestroySwapchainKHR); \
-    apply(vkQueuePresentKHR); \
-    apply(vkCreateImage); \
-    apply(vkGetImageMemoryRequirements); \
-    apply(vkBindImageMemory); \
-    apply(vkCreateDevice); \
-    apply(vkCmdPipelineBarrier); \
-    apply(vkCmdBlitImage); \
-    apply(vkDestroyImage)
+    apply(vkDestroyPipelineLayout);
     
 #define VULKAN_DEFINE_API_FUNCPTR(func) static PFN_##func func
 VULKAN_DEFINE_API_FUNCPTR(vkGetInstanceProcAddr);
@@ -104,14 +92,6 @@ static VKAPI_ATTR VkResult VKAPI_CALL Hook_vkCreateInstance(const VkInstanceCrea
     return result;
 }
 
-VkPhysicalDeviceMemoryProperties s_physicalDeviceMemoryProperties;
-
-static VKAPI_ATTR VkResult VKAPI_CALL Hook_vkCreateDevice(VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDevice* pDevice)
-{
-    vkGetPhysicalDeviceMemoryProperties(physicalDevice, &s_physicalDeviceMemoryProperties);
-    return vkCreateDevice(physicalDevice, pCreateInfo, pAllocator, pDevice);
-}
-
 static int FindMemoryTypeIndex(VkPhysicalDeviceMemoryProperties const & physicalDeviceMemoryProperties, VkMemoryRequirements const & memoryRequirements, VkMemoryPropertyFlags memoryPropertyFlags)
 {
     uint32_t memoryTypeBits = memoryRequirements.memoryTypeBits;
@@ -131,230 +111,6 @@ static int FindMemoryTypeIndex(VkPhysicalDeviceMemoryProperties const & physical
     return -1;
 }
 
-
-struct WrappedSwapchain
-{
-    VkSwapchainKHR swapchain;
-    VkExtent2D extent;
-    std::vector<VkImage> actualImages;
-
-    std::vector<VkImage> images;
-    std::vector<VkDeviceMemory> memory;
-};
-
-static bool CreateImage(VkDevice device, const VkSwapchainCreateInfoKHR& swapchainCreateInfo, VkImage* outImage, VkDeviceMemory* outMemory)
-{
-    VkImageCreateInfo createInfo;
-    createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    createInfo.pNext = NULL;
-    createInfo.flags = 0;
-    createInfo.imageType = VK_IMAGE_TYPE_2D;
-    createInfo.format = swapchainCreateInfo.imageFormat;
-    createInfo.extent.width = swapchainCreateInfo.imageExtent.width;
-    createInfo.extent.height = swapchainCreateInfo.imageExtent.height;
-    createInfo.extent.depth = 1;
-    createInfo.mipLevels = 1;
-    createInfo.arrayLayers = 1;
-    createInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-    createInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-    createInfo.usage = swapchainCreateInfo.imageUsage;
-    createInfo.sharingMode = swapchainCreateInfo.imageSharingMode;
-    createInfo.queueFamilyIndexCount = swapchainCreateInfo.queueFamilyIndexCount;
-    createInfo.pQueueFamilyIndices = swapchainCreateInfo.pQueueFamilyIndices;
-    createInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-
-    VkImage image;
-    if (vkCreateImage(device, &createInfo, NULL, &image) != VK_SUCCESS)
-        return false;
-
-    VkMemoryRequirements memoryRequirements;
-    vkGetImageMemoryRequirements(device, image, &memoryRequirements);
-
-    const int memoryTypeIndex = FindMemoryTypeIndex(s_physicalDeviceMemoryProperties, memoryRequirements, 0);
-    if (memoryTypeIndex >= 0)
-    {
-        VkMemoryAllocateInfo memoryAllocateInfo;
-        memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        memoryAllocateInfo.pNext = NULL;
-        memoryAllocateInfo.memoryTypeIndex = memoryTypeIndex;
-        memoryAllocateInfo.allocationSize = memoryRequirements.size;
-
-        VkDeviceMemory memory;
-        if (vkAllocateMemory(device, &memoryAllocateInfo, NULL, &memory) == VK_SUCCESS)
-        {
-            if (vkBindImageMemory(device, image, memory, 0) == VK_SUCCESS)
-            {
-                *outImage = image;
-                *outMemory = memory;
-                return true;
-            }
-            else
-            {
-                vkFreeMemory(device, memory, NULL);
-            }
-        }
-    }
-
-    vkDestroyImage(device, image, NULL);
-
-    return false;
-}
-
-std::map<VkImage, WrappedSwapchain*> s_ImageToSwapChain;
-
-static VKAPI_ATTR VkResult VKAPI_CALL Hook_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSwapchainKHR* pSwapchain)
-{
-    VkSwapchainKHR swapchain;
-    const VkResult result = vkCreateSwapchainKHR(device, pCreateInfo, pAllocator, &swapchain);
-    if (result == VK_SUCCESS)
-    {
-        WrappedSwapchain* sc = new WrappedSwapchain();
-        sc->swapchain = swapchain;
-        sc->extent = pCreateInfo->imageExtent;
-        *pSwapchain = (VkSwapchainKHR)sc;
-
-        uint32_t imageCount = 0;
-        if (vkGetSwapchainImagesKHR(device, swapchain, &imageCount, NULL) == VK_SUCCESS && imageCount > 0)
-        {
-            sc->actualImages.resize(imageCount);
-            sc->images.resize(imageCount);
-            sc->memory.resize(imageCount);
-            vkGetSwapchainImagesKHR(device, swapchain, &imageCount, sc->actualImages.data());
-           
-            for (uint32_t i = 0; i < imageCount; ++i)
-            {
-                CreateImage(device, *pCreateInfo, &sc->images[i], &sc->memory[i]);
-                s_ImageToSwapChain[sc->images[i]] = sc;
-            }
-        }
-    }
-    return result;
-}
-
-static VKAPI_ATTR void VKAPI_CALL Hook_vkDestroySwapchainKHR(VkDevice device, VkSwapchainKHR swapchain, const VkAllocationCallbacks* pAllocator)
-{
-    if (swapchain == VK_NULL_HANDLE)
-        return;
-
-    WrappedSwapchain* sc = (WrappedSwapchain*)swapchain;
-    for (size_t i = 0; i < sc->images.size(); ++i)
-        vkDestroyImage(device, sc->images[i], NULL);
-    for (size_t i = 0; i < sc->memory.size(); ++i)
-        vkFreeMemory(device, sc->memory[i], NULL);
-    vkDestroySwapchainKHR(device, sc->swapchain, pAllocator);
-    delete sc;
-}
-
-static VKAPI_ATTR VkResult VKAPI_CALL Hook_vkGetSwapchainImagesKHR(VkDevice device, VkSwapchainKHR swapchain, uint32_t* pSwapchainImageCount, VkImage* pSwapchainImages)
-{
-    WrappedSwapchain* const sc = (WrappedSwapchain*)swapchain;
-    const uint32_t numImages = static_cast<uint32_t>(sc->images.size());
-    if (pSwapchainImages == NULL)
-    {
-        *pSwapchainImageCount = numImages;
-        return VK_SUCCESS;
-    }
-
-    const uint32_t n = numImages < *pSwapchainImageCount ? numImages : *pSwapchainImageCount;
-    for (uint32_t i = 0; i < n; ++i)
-        pSwapchainImages[i] = sc->images[i];
-
-    *pSwapchainImageCount = n;
-
-    return VK_SUCCESS;
-}
-
-static VKAPI_ATTR VkResult VKAPI_CALL Hook_vkAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t* pImageIndex)
-{
-    WrappedSwapchain* sc = (WrappedSwapchain*)swapchain;
-    const VkResult result = vkAcquireNextImageKHR(device, sc->swapchain, timeout, semaphore, fence, pImageIndex);
-    return result;
-}
-
-static VKAPI_ATTR VkResult VKAPI_CALL Hook_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR* pPresentInfo)
-{
-    std::vector<VkSwapchainKHR> swapchains(pPresentInfo->swapchainCount);
-    for (uint32_t i = 0; i < pPresentInfo->swapchainCount; ++i)
-    {
-        WrappedSwapchain* sc = (WrappedSwapchain*)pPresentInfo->pSwapchains[i];
-        swapchains[i] = sc->swapchain;
-    }
-    VkPresentInfoKHR presentInfo = *pPresentInfo;
-    presentInfo.pSwapchains = swapchains.data();
-    const VkResult result = vkQueuePresentKHR(queue, &presentInfo);
-    return result;
-}
-
-static VKAPI_ATTR void VKAPI_CALL Hook_vkCmdPipelineBarrier(VkCommandBuffer commandBuffer, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags,
-    uint32_t memoryBarrierCount, const VkMemoryBarrier* pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier* pBufferMemoryBarriers, uint32_t imageMemoryBarrierCount,
-    const VkImageMemoryBarrier* pImageMemoryBarriers)
-{
-    vkCmdPipelineBarrier(commandBuffer, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers, bufferMemoryBarrierCount, pBufferMemoryBarriers, 0, NULL);
-    for (uint32_t i = 0; i < imageMemoryBarrierCount; ++i)
-    {
-        if (pImageMemoryBarriers[i].newLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR)
-        {
-            VkImage srcImage = pImageMemoryBarriers[i].image;
-            WrappedSwapchain* sc = s_ImageToSwapChain[srcImage];
-
-            size_t imageIndex = 0;
-            for (; imageIndex < sc->images.size(); ++imageIndex)
-                if (sc->images[imageIndex] == srcImage)
-                    break;
-
-            VkImageMemoryBarrier barrier = pImageMemoryBarriers[i];
-            barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-            vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, dependencyFlags, 0, NULL, 0, NULL, 1, &barrier);
-
-            VkImage dstImage = sc->actualImages[imageIndex];
-
-            VkImageMemoryBarrier presentToRender = {};
-            presentToRender.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-            presentToRender.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            presentToRender.srcAccessMask = 0;
-            presentToRender.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-            presentToRender.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            presentToRender.image = dstImage;
-            presentToRender.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            presentToRender.subresourceRange.layerCount = 1;
-            presentToRender.subresourceRange.levelCount = 1;
-            vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, dependencyFlags, 0, NULL, 0, NULL, 1, &presentToRender);
-
-            static int counter;
-            VkImageBlit blit;
-            blit.dstOffsets[0].x = 0;
-            blit.dstOffsets[0].y = 0;
-            blit.dstOffsets[0].z = 0;
-            blit.dstOffsets[1].x = sc->extent.width;
-            blit.dstOffsets[1].y = sc->extent.height;
-            blit.dstOffsets[1].z = 1;
-            double factor = (sin(static_cast<double>(counter++) * 0.01) + 1.0) * 0.1;
-            blit.srcOffsets[0].x = static_cast<int>(sc->extent.width * factor);
-            blit.srcOffsets[0].y = static_cast<int>(sc->extent.height * factor);
-            blit.srcOffsets[0].z = 0;
-            blit.srcOffsets[1].x = sc->extent.width - blit.srcOffsets[0].x;
-            blit.srcOffsets[1].y = sc->extent.height - blit.srcOffsets[0].y;
-            blit.srcOffsets[1].z = 1;
-            blit.dstSubresource.aspectMask = blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            blit.dstSubresource.baseArrayLayer = blit.srcSubresource.baseArrayLayer = 0;
-            blit.dstSubresource.layerCount = blit.srcSubresource.layerCount = 1;
-            blit.dstSubresource.mipLevel = blit.srcSubresource.mipLevel = 0;
-            vkCmdBlitImage(commandBuffer, srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, sc->actualImages[imageIndex], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
-
-            VkImageMemoryBarrier renderToPresent = presentToRender;
-            renderToPresent.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
-            renderToPresent.srcAccessMask = presentToRender.dstAccessMask;
-            renderToPresent.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-            renderToPresent.oldLayout = presentToRender.newLayout;
-            vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, dependencyFlags, 0, NULL, 0, NULL, 1, &renderToPresent);
-        } 
-        else
-        {
-            vkCmdPipelineBarrier(commandBuffer, srcStageMask, dstStageMask, dependencyFlags, 0, NULL, 0, NULL, 1, &pImageMemoryBarriers[i]);
-        }
-    }
-}
-
 static VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL Hook_vkGetInstanceProcAddr(VkInstance device, const char* funcName)
 {
     if (!funcName)
@@ -362,13 +118,6 @@ static VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL Hook_vkGetInstanceProcAddr(VkIns
 
 #define INTERCEPT(fn) if (strcmp(funcName, #fn) == 0) return (PFN_vkVoidFunction)&Hook_##fn
     INTERCEPT(vkCreateInstance);
-    INTERCEPT(vkGetSwapchainImagesKHR);
-    INTERCEPT(vkAcquireNextImageKHR);
-    INTERCEPT(vkCreateSwapchainKHR);
-    INTERCEPT(vkDestroySwapchainKHR);
-    INTERCEPT(vkQueuePresentKHR);
-    INTERCEPT(vkCreateDevice);
-    INTERCEPT(vkCmdPipelineBarrier);
 #undef INTERCEPT
 
     return NULL;
