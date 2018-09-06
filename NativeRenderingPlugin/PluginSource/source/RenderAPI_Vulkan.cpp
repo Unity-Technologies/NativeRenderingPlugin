@@ -60,7 +60,11 @@ static void LoadVulkanAPI(PFN_vkGetInstanceProcAddr getInstanceProcAddr, VkInsta
 {
     if (!vkGetInstanceProcAddr && getInstanceProcAddr)
         vkGetInstanceProcAddr = getInstanceProcAddr;
-#define LOAD_VULKAN_FUNC(fn) fn = (PFN_##fn)vkGetInstanceProcAddr(instance, #fn)
+
+	if (!vkCreateInstance)
+		vkCreateInstance = (PFN_vkCreateInstance)vkGetInstanceProcAddr(VK_NULL_HANDLE, "vkCreateInstance");
+
+#define LOAD_VULKAN_FUNC(fn) if (!fn) fn = (PFN_##fn)vkGetInstanceProcAddr(instance, #fn)
     UNITY_USED_VULKAN_API_FUNCTIONS(LOAD_VULKAN_FUNC);
 #undef LOAD_VULKAN_FUNC
 }
