@@ -900,6 +900,7 @@ void RenderAPI_Vulkan::DrawSimpleTriangles(const float worldMatrix[16], int tria
             m_TrianglePipelineLayout = CreateTrianglePipelineLayout(m_Instance.device);
 
         m_TrianglePipeline = CreateTrianglePipeline(m_Instance.device, m_TrianglePipelineLayout, recordingState.renderPass, VK_NULL_HANDLE);
+		m_TrianglePipelineRenderPass = recordingState.renderPass;
     }
 
     if (m_TrianglePipeline != VK_NULL_HANDLE && m_TrianglePipelineLayout != VK_NULL_HANDLE)
