@@ -9,16 +9,15 @@
 
 struct UnityVulkanInstance
 {
+    VkPipelineCache pipelineCache; // Unity's pipeline cache is serialized to disk
     VkInstance instance;
     VkPhysicalDevice physicalDevice;
     VkDevice device;
     VkQueue graphicsQueue;
-    VkPipelineCache pipelineCache; // Unity's pipeline cache is serialized to disk
-    unsigned int queueFamilyIndex;
     PFN_vkGetInstanceProcAddr getInstanceProcAddr; // vkGetInstanceProcAddr of the Vulkan loader, same as the one passed to UnityVulkanInitCallback
+    unsigned int queueFamilyIndex;
 
-    unsigned int reserved0;
-    void* reserved1[8];
+    void* reserved[8];
 };
 
 struct UnityVulkanMemory
@@ -70,8 +69,7 @@ struct UnityVulkanBuffer
     size_t sizeInBytes;         // size of the buffer in bytes, may be less than memory size
     VkBufferUsageFlags usage;
 
-    unsigned int reserved0;
-    void* reserved1[4];
+    void* reserved[4];
 };
 
 struct UnityVulkanRecordingState
@@ -139,11 +137,22 @@ const VkImageSubresource* const UnityVulkanWholeImage = NULL;
 // callback function, see InterceptInitialization
 typedef PFN_vkGetInstanceProcAddr(UNITY_INTERFACE_API * UnityVulkanInitCallback)(PFN_vkGetInstanceProcAddr getInstanceProcAddr, void* userdata);
 
+enum UnityVulkanSwapchainMode
+{
+    kUnityVulkanSwapchainMode_Default,
+    kUnityVulkanSwapchainMode_Offscreen
+};
+
+struct UnityVulkanSwapchainConfiguration
+{
+    UnityVulkanSwapchainMode mode;
+};
+
 UNITY_DECLARE_INTERFACE(IUnityGraphicsVulkan)
 {
     // Vulkan API hooks
     //
-    // Must be called before kUnityGfxDeviceEventInitialize
+    // Must be called before kUnityGfxDeviceEventInitialize (preload plugin)
     // Unity will call 'func' when initializing the Vulkan API
     // The 'getInstanceProcAddr' passed to the callback is the function pointer from the Vulkan Loader
     // The function pointer returned from UnityVulkanInitCallback may be a different implementation
@@ -199,11 +208,8 @@ UNITY_DECLARE_INTERFACE(IUnityGraphicsVulkan)
     // Must not be called from event callbacks configured for queue access (UnityVulkanGraphicsQueueAccess_Allow, UnityVulkanGraphicsQueueAccess_FlushAndAllow)
     // or from a AccessQueue callback of an event
     // See kUnityVulkanRenderPass_EnsureInside, kUnityVulkanRenderPass_EnsureOutside
-    //
-    // TODO: kind of overlaps with ConfigureEvent, but e.g. graphicsdemos plugin would be hard to implement when using separate events
     void(UNITY_INTERFACE_API * EnsureOutsideRenderPass)();
     void(UNITY_INTERFACE_API * EnsureInsideRenderPass)();
-
 
     // Allow command buffer submission to the the Vulkan graphics queue from the given UnityRenderingEventAndData callback.
     // This is an alternative to using ConfigureEvent with kUnityVulkanGraphicsQueueAccess_Allow.
@@ -211,8 +217,10 @@ UNITY_DECLARE_INTERFACE(IUnityGraphicsVulkan)
     // eventId and userdata are passed to the callback
     // This may or may not be called synchronously or from the submission thread.
     // If flush is true then all Unity command buffers of this frame are submitted before UnityQueueAccessCallback
-    //
-    // TODO: do we need this?
     void(UNITY_INTERFACE_API * AccessQueue)(UnityRenderingEventAndData, int eventId, void* userData, bool flush);
+
+    // Configure swapchains that are created by Unity.
+    // Must be called before kUnityGfxDeviceEventInitialize (preload plugin)
+    bool(UNITY_INTERFACE_API * ConfigureSwapchain)(const UnityVulkanSwapchainConfiguration * swapChainConfig);
 };
 UNITY_REGISTER_INTERFACE_GUID(0x95355348d4ef4e11ULL, 0x9789313dfcffcc87ULL, IUnityGraphicsVulkan)
