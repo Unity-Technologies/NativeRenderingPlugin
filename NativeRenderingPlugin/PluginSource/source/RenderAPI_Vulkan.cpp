@@ -59,8 +59,9 @@ static void LoadVulkanAPI(PFN_vkGetInstanceProcAddr getInstanceProcAddr, VkInsta
 
 static VKAPI_ATTR void VKAPI_CALL Hook_vkCmdBeginRenderPass(VkCommandBuffer commandBuffer, const VkRenderPassBeginInfo* pRenderPassBegin, VkSubpassContents contents)
 {
-    // Override the clear color with green
-    if (pRenderPassBegin->clearValueCount <= 16 && pRenderPassBegin->clearValueCount > 0)
+    // Change this to 'true' to override the clear color with green
+	const bool allowOverrideClearColor = false;
+    if (pRenderPassBegin->clearValueCount <= 16 && pRenderPassBegin->clearValueCount > 0 && allowOverrideClearColor)
     {
         VkClearValue clearValues[16] = {};
         memcpy(clearValues, pRenderPassBegin->pClearValues, pRenderPassBegin->clearValueCount * sizeof(VkClearValue));
@@ -80,7 +81,7 @@ static VKAPI_ATTR void VKAPI_CALL Hook_vkCmdBeginRenderPass(VkCommandBuffer comm
     {
         vkCmdBeginRenderPass(commandBuffer, pRenderPassBegin, contents);
     }
-}  
+}
 
 static VKAPI_ATTR VkResult VKAPI_CALL Hook_vkCreateInstance(const VkInstanceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkInstance* pInstance)
 {
