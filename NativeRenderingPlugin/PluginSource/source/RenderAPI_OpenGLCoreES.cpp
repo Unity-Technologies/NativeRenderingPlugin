@@ -20,6 +20,9 @@
 // library (like GLEW, GLFW etc.) can be used; here we use gl3w since it's simple and
 // straightforward.
 #	include "gl3w/gl3w.h"
+#elif UNITY_LINUX
+#	define GL_GLEXT_PROTOTYPES
+#	include <GL/gl.h>
 #else
 #	error Unknown platform
 #endif
