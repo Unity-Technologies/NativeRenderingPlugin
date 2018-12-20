@@ -10,7 +10,6 @@
 		2B6899B81CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899B01CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp */; };
 		2B6899B91CF8396700C4BA4F /* RenderAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899B11CF8396700C4BA4F /* RenderAPI.cpp */; };
 		2B6899BA1CF8396700C4BA4F /* RenderingPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899B31CF8396700C4BA4F /* RenderingPlugin.cpp */; };
-		2B6899C11CF8399700C4BA4F /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899BD1CF8399700C4BA4F /* glew.c */; };
 		2B6899C91CF83DB000C4BA4F /* RenderingPlugin.bundle in Copy Bundle into Unity project */ = {isa = PBXBuildFile; fileRef = 8D576316048677EA00EA77CD /* RenderingPlugin.bundle */; };
 		2B6899CB1CF8409A00C4BA4F /* RenderAPI_Metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899CA1CF8409A00C4BA4F /* RenderAPI_Metal.mm */; };
 		2BC2A8D5144C433D00D5EF79 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */; };
@@ -40,10 +39,6 @@
 		2B6899B11CF8396700C4BA4F /* RenderAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI.cpp; path = ../../source/RenderAPI.cpp; sourceTree = "<group>"; };
 		2B6899B21CF8396700C4BA4F /* RenderAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderAPI.h; path = ../../source/RenderAPI.h; sourceTree = "<group>"; };
 		2B6899B31CF8396700C4BA4F /* RenderingPlugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderingPlugin.cpp; path = ../../source/RenderingPlugin.cpp; sourceTree = "<group>"; };
-		2B6899BD1CF8399700C4BA4F /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = ../../source/GLEW/glew.c; sourceTree = "<group>"; };
-		2B6899BE1CF8399700C4BA4F /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glew.h; path = ../../source/GLEW/glew.h; sourceTree = "<group>"; };
-		2B6899BF1CF8399700C4BA4F /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glxew.h; path = ../../source/GLEW/glxew.h; sourceTree = "<group>"; };
-		2B6899C01CF8399700C4BA4F /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wglew.h; path = ../../source/GLEW/wglew.h; sourceTree = "<group>"; };
 		2B6899C21CF839A600C4BA4F /* IUnityGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityGraphics.h; path = ../../source/Unity/IUnityGraphics.h; sourceTree = "<group>"; };
 		2B6899C31CF839A600C4BA4F /* IUnityGraphicsD3D9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityGraphicsD3D9.h; path = ../../source/Unity/IUnityGraphicsD3D9.h; sourceTree = "<group>"; };
 		2B6899C41CF839A600C4BA4F /* IUnityGraphicsD3D11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityGraphicsD3D11.h; path = ../../source/Unity/IUnityGraphicsD3D11.h; sourceTree = "<group>"; };
@@ -100,7 +95,6 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				2B6899BB1CF8397C00C4BA4F /* GLEW */,
 				2B6899BC1CF8398200C4BA4F /* Unity */,
 				2B6899AB1CF8396700C4BA4F /* PlatformBase.h */,
 				2B6899AD1CF8396700C4BA4F /* RenderAPI_D3D11.cpp */,
@@ -120,17 +114,6 @@
 				8D576316048677EA00EA77CD /* RenderingPlugin.bundle */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		2B6899BB1CF8397C00C4BA4F /* GLEW */ = {
-			isa = PBXGroup;
-			children = (
-				2B6899BD1CF8399700C4BA4F /* glew.c */,
-				2B6899BE1CF8399700C4BA4F /* glew.h */,
-				2B6899BF1CF8399700C4BA4F /* glxew.h */,
-				2B6899C01CF8399700C4BA4F /* wglew.h */,
-			);
-			name = GLEW;
 			sourceTree = "<group>";
 		};
 		2B6899BC1CF8398200C4BA4F /* Unity */ = {
@@ -214,7 +197,6 @@
 				2B6899B81CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp in Sources */,
 				2B6899B91CF8396700C4BA4F /* RenderAPI.cpp in Sources */,
 				2B6899CB1CF8409A00C4BA4F /* RenderAPI_Metal.mm in Sources */,
-				2B6899C11CF8399700C4BA4F /* glew.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
