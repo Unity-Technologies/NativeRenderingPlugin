@@ -4,11 +4,9 @@ $(SRCDIR)/RenderAPI.cpp \
 $(SRCDIR)/RenderAPI_OpenGLCoreES.cpp
 OBJS = ${SRCS:.cpp=.o}
 UNITY_DEFINES = -DSUPPORT_OPENGL_UNIFIED=1 -DUNITY_LINUX=1
-GLEW_CFLAGS = $(shell pkg-config --cflags glew)
-GLEW_LIBS = $(shell pkg-config --libs glew)
-CXXFLAGS = $(UNITY_DEFINES) -O2 -fPIC $(GLEW_CFLAGS)
+CXXFLAGS = $(UNITY_DEFINES) -O2 -fPIC
 LDFLAGS = -shared -rdynamic
-LIBS = $(GLEW_LIBS)
+LIBS = 
 PLUGIN_SHARED = libRenderingPlugin.so
 CXX ?= g++
 
