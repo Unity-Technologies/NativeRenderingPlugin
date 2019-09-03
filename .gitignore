@@ -5,6 +5,7 @@
 
 xcuserdata
 *.xcworkspace
+xcshareddata
 
 WSATestCertificate.pfx*
 

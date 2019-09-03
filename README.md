@@ -19,9 +19,9 @@ The plugin itself does very few things:
 
 Native code rendering is implemented for several platforms and graphics APIs:
 
-* Windows (D3D11, D3D12, OpenGL Core)
-* Mac OS X (Metal, OpenGL Core)
-* Linux (OpenGL Core)
+* Windows (D3D11, D3D12, OpenGL)
+* macOS X (Metal, OpenGL)
+* Linux (OpenGL)
 * Windows Store aka UWP (D3D11, D3D12)
 * WebGL
 * Android (OpenGL ES 2.0)
@@ -33,9 +33,9 @@ Code is organized as follows:
  	* `source`: The source code itself. `RenderingPlugin.cpp` is the main logic, `RenderAPI*.*` files contain rendering implementations for different APIs.
 	* `projects/VisualStudio2015`: Visual Studio 2015 project files for regular Windows plugin
 	* `projects/UWPVisualStudio2015`: Visual Studio 2015 project files for Windows Store (UWP - Win10) plugin
-	* `projects/Xcode`: Apple Xcode project file for Mac OS X plugin, Xcode 7.3 on OS X 10.11 was tested
+	* `projects/Xcode`: Apple Xcode project file for Mac OS X plugin, Xcode 10.3 on macOS 10.14 was tested
 	* `projects/GNUMake`: Makefile for Linux
-* `UnityProject` is the Unity (2018.4 was tested) project.
+* `UnityProject` is the Unity (2018.3.9 was tested) project.
 	* Single `scene` that contains the plugin sample scene.
 
 
