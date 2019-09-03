@@ -14,7 +14,9 @@ The plugin itself does very few things:
 * **Draws a triangle**. A single colored rotating triangle in the middle of the screen. For each backend API, this shows bare basics of how to setup vertex data, setup
   some shaders or render states, and do a draw call.
 * **Changes Unity texture data**. Unity side passes a texture into the plugin, and the code changes the pixels of it each frame, with an animated "plasma" pattern. This
-  demonstrates how to work with [Texture.GetNativeTexturePtr](http://docs.unity3d.com/ScriptReference/Texture.GetNativeTexturePtr.html).
+  demonstrates how to work with [Texture.GetNativeTexturePtr](https://docs.unity3d.com/ScriptReference/Texture.GetNativeTexturePtr.html).
+* **Changes Unity mesh vertex data**. Unity side passes a vertex buffer into the plugin, and the code changes the vertices each frame, with an animated "heightfield" pattern. This
+  demonstrates how to work with [Mesh.GetNativeVertexBufferPtr](https://docs.unity3d.com/ScriptReference/Mesh.GetNativeVertexBufferPtr.html).
 
 
 Native code rendering is implemented for several platforms and graphics APIs:
