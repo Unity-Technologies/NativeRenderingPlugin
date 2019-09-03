@@ -5,8 +5,8 @@ This sample demonstrates how to render and do other graphics related things from
 
 Unity versions:
 
-* **2018.1** use tip of default branch.
-* 5.4, 5.5, 4.6: use corresponding `unity-x.x` tag.
+* **2018.1+** use tip of default branch.
+* 5.6, 5.5, 5.4: use corresponding `unity-x.x` tag.
 
 The plugin itself does very few things:
 
@@ -35,7 +35,7 @@ Code is organized as follows:
 	* `projects/UWPVisualStudio2015`: Visual Studio 2015 project files for Windows Store (UWP - Win10) plugin
 	* `projects/Xcode`: Apple Xcode project file for Mac OS X plugin, Xcode 7.3 on OS X 10.11 was tested
 	* `projects/GNUMake`: Makefile for Linux
-* `UnityProject` is the Unity (5.4b19 was tested) project.
+* `UnityProject` is the Unity (2018.4 was tested) project.
 	* Single `scene` that contains the plugin sample scene.
 
 

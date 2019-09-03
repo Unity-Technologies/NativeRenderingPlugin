@@ -13,6 +13,7 @@ UnityProject/*.sln
 UnityProject/Library
 UnityProject/Temp
 UnityProject/UWP
+UnityProject/Logs
 
 PluginSource/build
 PluginSource/projects/Android/libs/*
