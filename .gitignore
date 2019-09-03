@@ -1,5 +1,3 @@
-syntax: glob
-
 *.sdf
 *.vcxproj.user
 *.VC.opendb
@@ -16,6 +14,6 @@ UnityProject/Library
 UnityProject/Temp
 UnityProject/UWP
 
-NativeRenderingPlugin/PluginSource/build
-NativeRenderingPlugin/PluginSource/projects/Android/libs/*
-NativeRenderingPlugin/PluginSource/projects/Android/obj/*
+PluginSource/build
+PluginSource/projects/Android/libs/*
+PluginSource/projects/Android/obj/*
