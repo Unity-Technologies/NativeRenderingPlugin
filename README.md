@@ -33,7 +33,6 @@ Code is organized as follows:
  	* `source`: The source code itself. `RenderingPlugin.cpp` is the main logic, `RenderAPI*.*` files contain rendering implementations for different APIs.
 	* `projects/VisualStudio2015`: Visual Studio 2015 project files for regular Windows plugin
 	* `projects/UWPVisualStudio2015`: Visual Studio 2015 project files for Windows Store (UWP - Win10) plugin
-	* `projects/WSAVisualStudio2013`: Visual Studio 2013 project files for Windows Store (WSA - Win8.1) plugin
 	* `projects/Xcode`: Apple Xcode project file for Mac OS X plugin, Xcode 7.3 on OS X 10.11 was tested
 	* `projects/GNUMake`: Makefile for Linux
 * `UnityProject` is the Unity (5.4b19 was tested) project.
