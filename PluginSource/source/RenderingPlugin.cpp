@@ -45,6 +45,7 @@ struct MeshVertex
 {
 	float pos[3];
 	float normal[3];
+	float color[4];
 	float uv[2];
 };
 static std::vector<MeshVertex> g_VertexSource;

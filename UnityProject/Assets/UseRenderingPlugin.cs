@@ -86,6 +86,12 @@ public class UseRenderingPlugin : MonoBehaviour
 		// by default they are immutable and only GPU-readable).
 		mesh.MarkDynamic ();
 
+		// Make sure to have vertex colors so that the plugin can rely on a known
+		// vertex layout (position+normal+color+UV). Since Unity 2019.3 it's easier
+		// since there are APIs to query all that info.
+		var colors = mesh.colors;
+		mesh.colors = colors;		
+
 		// However, mesh being dynamic also means that the CPU on most platforms can not
 		// read from the vertex buffer. Our plugin also wants original mesh data,
 		// so let's pass it as pointers to regular C# arrays.
