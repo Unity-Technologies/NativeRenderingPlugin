@@ -12,7 +12,7 @@ public class UseRenderingPlugin : MonoBehaviour
 	// For this example, we'll call into plugin's SetTimeFromUnity
 	// function and pass the current time so the plugin can animate.
 
-#if (UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR
+#if (UNITY_IOS || UNITY_TVOS || UNITY_WEBGL) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 #else
 	[DllImport ("RenderingPlugin")]
@@ -22,7 +22,7 @@ public class UseRenderingPlugin : MonoBehaviour
 
 	// We'll also pass native pointer to a texture in Unity.
 	// The plugin will fill texture data from native code.
-#if (UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR
+#if (UNITY_IOS || UNITY_TVOS || UNITY_WEBGL) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 #else
 	[DllImport ("RenderingPlugin")]
@@ -32,14 +32,14 @@ public class UseRenderingPlugin : MonoBehaviour
 	// We'll pass native pointer to the mesh vertex buffer.
 	// Also passing source unmodified mesh data.
 	// The plugin will fill vertex data from native code.
-#if (UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR
+#if (UNITY_IOS || UNITY_TVOS || UNITY_WEBGL) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 #else
 	[DllImport ("RenderingPlugin")]
 #endif
 	private static extern void SetMeshBuffersFromUnity (IntPtr vertexBuffer, int vertexCount, IntPtr sourceVertices, IntPtr sourceNormals, IntPtr sourceUVs);
 
-#if (UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR
+#if (UNITY_IOS || UNITY_TVOS || UNITY_WEBGL) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 #else
 	[DllImport("RenderingPlugin")]
@@ -90,7 +90,7 @@ public class UseRenderingPlugin : MonoBehaviour
 		// vertex layout (position+normal+color+UV). Since Unity 2019.3 it's easier
 		// since there are APIs to query all that info.
 		var colors = mesh.colors;
-		mesh.colors = colors;		
+		mesh.colors = colors;
 
 		// However, mesh being dynamic also means that the CPU on most platforms can not
 		// read from the vertex buffer. Our plugin also wants original mesh data,

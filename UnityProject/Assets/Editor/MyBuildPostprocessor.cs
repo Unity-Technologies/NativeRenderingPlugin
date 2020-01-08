@@ -23,8 +23,11 @@ public class MyBuildPostprocessor
 		UnityEditor.iOS.Xcode.PBXProject proj = new UnityEditor.iOS.Xcode.PBXProject();
 		proj.ReadFromString(File.ReadAllText(projPath));
 
-		//2019.3
+	#if UNITY_2019_3_OR_NEWER
 		string target = proj.GetUnityFrameworkTargetGuid();
+	#else
+		string target = proj.TargetGuidByName("Unity-iPhone");
+	#endif
 
 		string[] filesToCopy = new string[] {
 			"PlatformBase.h", "RenderingPlugin.cpp",
