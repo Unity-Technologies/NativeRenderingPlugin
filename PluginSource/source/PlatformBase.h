@@ -9,15 +9,18 @@
 // UNITY_WIN - Windows (regular win32)
 // UNITY_OSX - Mac OS X
 // UNITY_LINUX - Linux
-// UNITY_IPHONE - iOS
+// UNITY_IOS - iOS
+// UNITY_TVOS - tvOS
 // UNITY_ANDROID - Android
 // UNITY_METRO - WSA or UWP
 // UNITY_WEBGL - WebGL
 #if _MSC_VER
 	#define UNITY_WIN 1
 #elif defined(__APPLE__)
-	#if defined(__arm__) || defined(__arm64__)
-		#define UNITY_IPHONE 1
+    #if TARGET_OS_TV
+        #define UNITY_TVOS 1
+    #elif TARGET_OS_IOS
+        #define UNITY_IOS 1
 	#else
 		#define UNITY_OSX 1
 	#endif
@@ -46,7 +49,7 @@
 	#define SUPPORT_OPENGL_UNIFIED 1
 	#define SUPPORT_OPENGL_CORE 1
 	#define SUPPORT_VULKAN 0 // Requires Vulkan SDK to be installed
-#elif UNITY_IPHONE || UNITY_ANDROID || UNITY_WEBGL
+#elif UNITY_IOS || UNITY_TVOS || UNITY_ANDROID || UNITY_WEBGL
 	#ifndef SUPPORT_OPENGL_ES
 		#define SUPPORT_OPENGL_ES 1
 	#endif
@@ -59,7 +62,7 @@
 	#define SUPPORT_OPENGL_CORE 1
 #endif
 
-#if UNITY_IPHONE || UNITY_OSX
+#if UNITY_IOS || UNITY_TVOS || UNITY_OSX
 	#define SUPPORT_METAL 1
 #endif
 

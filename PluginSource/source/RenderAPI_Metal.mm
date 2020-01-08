@@ -139,14 +139,8 @@ void RenderAPI_Metal::CreateResources()
 	// Let's assume we're rendering into BGRA8Unorm...
 	pipeDesc.colorAttachments[0].pixelFormat= MTLPixelFormatBGRA8Unorm;
 
-	// OSX/tvOS insist on more modern enums
-#if (UNITY_IPHONE && TARGET_OS_TV) || UNITY_OSX
 	pipeDesc.depthAttachmentPixelFormat		= MTLPixelFormatDepth32Float_Stencil8;
 	pipeDesc.stencilAttachmentPixelFormat	= MTLPixelFormatDepth32Float_Stencil8;
-#else
-	pipeDesc.depthAttachmentPixelFormat		= MTLPixelFormatDepth32Float;
-	pipeDesc.stencilAttachmentPixelFormat	= MTLPixelFormatStencil8;
-#endif
 
 	pipeDesc.sampleCount = 1;
 	pipeDesc.colorAttachments[0].blendingEnabled = NO;
@@ -180,10 +174,9 @@ void RenderAPI_Metal::ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInt
 	if (type == kUnityGfxDeviceEventInitialize)
 	{
 		m_MetalGraphics = interfaces->Get<IUnityGraphicsMetal>();
-		NSBundle* metalBundle = m_MetalGraphics->MetalBundle();
-		MTLVertexDescriptorClass			= [metalBundle classNamed:@"MTLVertexDescriptor"];
-		MTLRenderPipelineDescriptorClass	= [metalBundle classNamed:@"MTLRenderPipelineDescriptor"];
-		MTLDepthStencilDescriptorClass		= [metalBundle classNamed:@"MTLDepthStencilDescriptor"];
+		MTLVertexDescriptorClass            = NSClassFromString(@"MTLVertexDescriptor");
+		MTLRenderPipelineDescriptorClass    = NSClassFromString(@"MTLRenderPipelineDescriptor");
+		MTLDepthStencilDescriptorClass      = NSClassFromString(@"MTLDepthStencilDescriptor");
 
 		CreateResources();
 	}
