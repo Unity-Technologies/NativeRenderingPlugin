@@ -42,35 +42,6 @@ public class MyBuildPostprocessor
 			proj.AddFileToBuild(target, proj.AddFile(dstLocalPath, dstLocalPath));
 		}
 
-		// on ios/tvos we need to register native plugins in trampoline
-		// as the code needed for that is minuscle we just codegen it
-		string registerCode = @"
-	#import ""UnityAppController.h""
-	#include ""Unity/IUnityGraphics.h""
-
-	extern ""C"" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces);
-	extern ""C"" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload();
-
-	@interface MyAppController : UnityAppController
-	{
-	}
-	- (void)shouldAttachRenderDelegate;
-	@end
-	@implementation MyAppController
-	- (void)shouldAttachRenderDelegate
-	{
-		// unlike desktops where plugin dynamic library is automatically loaded and registered
-		// we need to do that manually on iOS
-		UnityRegisterRenderingPluginV5(&UnityPluginLoad, &UnityPluginUnload);
-	}
-
-	@end
-	IMPL_APP_CONTROLLER_SUBCLASS(MyAppController);
-		";
-		const string registerPath = "Libraries/RegisterPlugin.mm";
-		File.WriteAllText(Path.Combine(pathToBuiltProject, registerPath), registerCode);
-		proj.AddFileToBuild(target, proj.AddFile(registerPath, registerPath));
-
 		File.WriteAllText(projPath, proj.WriteToString());
 	#endif
 	}
