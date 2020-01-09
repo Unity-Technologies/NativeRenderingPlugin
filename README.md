@@ -29,7 +29,8 @@ Native code rendering is implemented for several platforms and graphics APIs:
 * Windows Store aka UWP (D3D11, D3D12)
 * WebGL (OpenGL ES)
 * Android (OpenGL ES, Vulkan)
-* ...more platforms (iOS, ...) coming soon, we just did not get around to adding project files yet.
+* iOS/tvOS (Metal; Simulator is supported if you use unity 2020+ and XCode 11+)
+* ...more platforms might be coming soon, we just did not get around to adding project files yet.
 
 Code is organized as follows:
 

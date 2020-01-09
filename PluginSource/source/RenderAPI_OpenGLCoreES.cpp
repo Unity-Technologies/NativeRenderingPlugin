@@ -9,7 +9,7 @@
 
 
 #include <assert.h>
-#if UNITY_IPHONE
+#if UNITY_IOS || UNITY_TVOS
 #	include <OpenGLES/ES2/gl.h>
 #elif UNITY_ANDROID || UNITY_WEBGL
 #	include <GLES2/gl2.h>
