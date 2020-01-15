@@ -30,6 +30,7 @@ public:
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
 
 private:
+	UINT64 GetAlignedSize(int width, int height, int pixelSize, int rowPitch);
 	ID3D12Resource* GetUploadResource(UINT64 size);
 	void CreateResources();
 	void ReleaseResources();
@@ -63,6 +64,23 @@ RenderAPI_D3D12::RenderAPI_D3D12()
 {
 }
 
+UINT64 RenderAPI_D3D12::GetAlignedSize( int width, int height, int pixelSize, int rowPitch)
+{
+	UINT64 size = width * height * pixelSize;
+
+	if (size < D3D12_SMALL_RESOURCE_PLACEMENT_ALIGNMENT)
+	{
+		return D3D12_SMALL_RESOURCE_PLACEMENT_ALIGNMENT;
+	}
+	else if (width * pixelSize < rowPitch)
+	{
+		return rowPitch * height;
+	}
+	else
+	{
+		return size;
+	}
+}
 
 ID3D12Resource* RenderAPI_D3D12::GetUploadResource(UINT64 size)
 {
@@ -179,11 +197,12 @@ void* RenderAPI_D3D12::BeginModifyTexture(void* textureHandle, int textureWidth,
 	s_D3D12CmdList->Reset(s_D3D12CmdAlloc, nullptr);
 
 	// Fill data
-	const UINT64 kDataSize = textureWidth * textureHeight * 4;
+	// Clamp to minimum rowPitch of RGBA32
+	*outRowPitch = max(textureWidth * 4, 256);
+	const UINT64 kDataSize = GetAlignedSize(textureWidth, textureHeight, 4, *outRowPitch);
 	ID3D12Resource* upload = GetUploadResource(kDataSize);
 	void* mapped = NULL;
 	upload->Map(0, NULL, &mapped);
-	*outRowPitch = textureWidth * 4;
 	return mapped;
 }
 
@@ -192,7 +211,7 @@ void RenderAPI_D3D12::EndModifyTexture(void* textureHandle, int textureWidth, in
 {
 	ID3D12Device* device = s_D3D12->GetDevice();
 
-	const UINT64 kDataSize = textureWidth * textureHeight * 4;
+	const UINT64 kDataSize = GetAlignedSize(textureWidth, textureHeight, 4, rowPitch);
 	ID3D12Resource* upload = GetUploadResource(kDataSize);
 	upload->Unmap(0, NULL);
 
