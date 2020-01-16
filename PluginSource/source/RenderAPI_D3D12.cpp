@@ -1,6 +1,8 @@
 #include "RenderAPI.h"
 #include "PlatformBase.h"
 
+#include <cmath>
+
 // Direct3D 12 implementation of RenderAPI.
 
 
@@ -30,6 +32,7 @@ public:
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
 
 private:
+	UINT64 AlignPow2(UINT64 value);
 	UINT64 GetAlignedSize(int width, int height, int pixelSize, int rowPitch);
 	ID3D12Resource* GetUploadResource(UINT64 size);
 	void CreateResources();
@@ -64,9 +67,17 @@ RenderAPI_D3D12::RenderAPI_D3D12()
 {
 }
 
+UINT64 RenderAPI_D3D12::AlignPow2(UINT64 value)
+{
+	UINT64 aligned = pow(2, (int)log2(value));
+	return aligned >= value ? aligned : aligned * 2;
+}
+
 UINT64 RenderAPI_D3D12::GetAlignedSize( int width, int height, int pixelSize, int rowPitch)
 {
 	UINT64 size = width * height * pixelSize;
+
+	size = AlignPow2(size);
 
 	if (size < D3D12_SMALL_RESOURCE_PLACEMENT_ALIGNMENT)
 	{
@@ -198,7 +209,7 @@ void* RenderAPI_D3D12::BeginModifyTexture(void* textureHandle, int textureWidth,
 
 	// Fill data
 	// Clamp to minimum rowPitch of RGBA32
-	*outRowPitch = max(textureWidth * 4, 256);
+	*outRowPitch = max(AlignPow2(textureWidth * 4), 256);
 	const UINT64 kDataSize = GetAlignedSize(textureWidth, textureHeight, 4, *outRowPitch);
 	ID3D12Resource* upload = GetUploadResource(kDataSize);
 	void* mapped = NULL;
