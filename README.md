@@ -24,8 +24,8 @@ Native code rendering is implemented for several platforms and graphics APIs:
 * Windows (D3D11, D3D12, OpenGL, Vulkan)
 	* Note that Vulkan is not compiled in by default (requires Vulkan SDK); enable it by editing `#define SUPPORT_VULKAN 0`
 	to `1` under `UNITY_WIN` clause in `PlatformBase.h`
-* macOS X (Metal, OpenGL)
-* Linux (OpenGL)
+* macOS (Metal, OpenGL)
+* Linux (OpenGL, Vulkan)
 * Windows Store aka UWP (D3D11, D3D12)
 * WebGL (OpenGL ES)
 * Android (OpenGL ES, Vulkan)
