@@ -8,14 +8,32 @@
 #include <vector>
 
 
+static void* g_RenderTextureHandle = NULL;
+static int   g_RenderTextureWidth  = 0;
+static int   g_RenderTextureHeight = 0;
+static void* copied_RenderTexture = NULL;
+
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetRenderTextureFromUnity(void* textureHandle, int w, int h)
+{
+    // A script calls this at initialization time; just remember the texture pointer here.
+    // Will update texture pixels each frame from the plugin rendering event (texture update
+    // needs to happen on the rendering thread).
+    g_RenderTextureHandle = textureHandle;
+    g_RenderTextureWidth = w;
+    g_RenderTextureHeight = h;
+}
+
+extern "C" void* UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetCopiedTexture ()
+{
+    return copied_RenderTexture;
+}
+
 // --------------------------------------------------------------------------
 // SetTimeFromUnity, an example function we export which is called by one of the scripts.
 
 static float g_Time;
 
 extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetTimeFromUnity (float t) { g_Time = t; }
-
-
 
 // --------------------------------------------------------------------------
 // SetTextureFromUnity, an example function we export which is called by one of the scripts.
@@ -285,6 +303,10 @@ static void ModifyVertexBuffer()
 	s_CurrentAPI->EndModifyVertexBuffer(bufferHandle);
 }
 
+static void CopyTexture()
+{
+    s_CurrentAPI->CopyTexture(g_RenderTextureHandle, g_RenderTextureWidth, g_RenderTextureHeight, copied_RenderTexture);
+}
 
 static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 {
@@ -295,6 +317,7 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 	DrawColoredTriangle();
 	ModifyTexturePixels();
 	ModifyVertexBuffer();
+    CopyTexture();
 }
 
 

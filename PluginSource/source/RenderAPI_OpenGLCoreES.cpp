@@ -45,6 +45,7 @@ public:
 
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
+    virtual void CopyTexture(void* source, int width, int height, void* destination);
 
 private:
 	void CreateResources();
@@ -58,6 +59,8 @@ private:
 	GLuint m_VertexBuffer;
 	int m_UniformWorldMatrix;
 	int m_UniformProjMatrix;
+    GLuint m_TexBuffer;
+    GLuint m_TempFrameBuffer;
 };
 
 
@@ -179,6 +182,9 @@ void RenderAPI_OpenGLCoreES::CreateResources()
 	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, 1024, NULL, GL_STREAM_DRAW);
 
+    glGenTextures(1, &m_TexBuffer);
+    glGenBuffers(1, &m_TempFrameBuffer);
+    
 	assert(glGetError() == GL_NO_ERROR);
 }
 
@@ -298,6 +304,19 @@ void RenderAPI_OpenGLCoreES::EndModifyVertexBuffer(void* bufferHandle)
 	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 #	endif
+}
+
+void RenderAPI_OpenGLCoreES::CopyTexture(void* source, int width, int height, void* destination)
+{
+    destination = &m_TexBuffer;
+    
+    GLint src = (GLint)(size_t)source;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, m_TempFrameBuffer);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, src, 0);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_TexBuffer, 0);
+    glDrawBuffer(GL_COLOR_ATTACHMENT1);
+    glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
 #endif // #if SUPPORT_OPENGL_UNIFIED
