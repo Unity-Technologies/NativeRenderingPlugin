@@ -11,7 +11,6 @@
 static void* g_RenderTextureHandle = NULL;
 static int   g_RenderTextureWidth  = 0;
 static int   g_RenderTextureHeight = 0;
-static void* copied_RenderTexture = NULL;
 
 extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetRenderTextureFromUnity(void* textureHandle, int w, int h)
 {
@@ -21,11 +20,6 @@ extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetRenderTextureFromU
     g_RenderTextureHandle = textureHandle;
     g_RenderTextureWidth = w;
     g_RenderTextureHeight = h;
-}
-
-extern "C" void* UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetCopiedTexture ()
-{
-    return copied_RenderTexture;
 }
 
 // --------------------------------------------------------------------------
@@ -151,6 +145,10 @@ extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API RegisterPlugin()
 static RenderAPI* s_CurrentAPI = NULL;
 static UnityGfxRenderer s_DeviceType = kUnityGfxRendererNull;
 
+extern "C" void* UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetCopiedTexture ()
+{
+    return s_CurrentAPI->GetCopiedTexture();
+}
 
 static void UNITY_INTERFACE_API OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType)
 {
@@ -305,7 +303,7 @@ static void ModifyVertexBuffer()
 
 static void CopyTexture()
 {
-    s_CurrentAPI->CopyTexture(g_RenderTextureHandle, g_RenderTextureWidth, g_RenderTextureHeight, copied_RenderTexture);
+    s_CurrentAPI->CopyTexture(g_RenderTextureHandle, g_RenderTextureWidth, g_RenderTextureHeight);
 }
 
 static void UNITY_INTERFACE_API OnRenderEvent(int eventID)

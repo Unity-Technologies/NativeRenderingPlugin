@@ -45,7 +45,8 @@ public:
 
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
-    virtual void CopyTexture(void* source, int width, int height, void* destination);
+    virtual void CopyTexture(void* source, int width, int height);
+    virtual void* GetCopiedTexture();
 
 private:
 	void CreateResources();
@@ -183,7 +184,12 @@ void RenderAPI_OpenGLCoreES::CreateResources()
 	glBufferData(GL_ARRAY_BUFFER, 1024, NULL, GL_STREAM_DRAW);
 
     glGenTextures(1, &m_TexBuffer);
-    glGenBuffers(1, &m_TempFrameBuffer);
+    glBindTexture(GL_TEXTURE_2D, m_TexBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // Compatible OpenGL 4.1
+//    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 256, 256);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glGenFramebuffers(1, &m_TempFrameBuffer);
     
 	assert(glGetError() == GL_NO_ERROR);
 }
@@ -306,17 +312,25 @@ void RenderAPI_OpenGLCoreES::EndModifyVertexBuffer(void* bufferHandle)
 #	endif
 }
 
-void RenderAPI_OpenGLCoreES::CopyTexture(void* source, int width, int height, void* destination)
+void RenderAPI_OpenGLCoreES::CopyTexture(void* source, int width, int height)
 {
-    destination = &m_TexBuffer;
-    
     GLint src = (GLint)(size_t)source;
 
-    glBindFramebuffer(GL_FRAMEBUFFER, m_TempFrameBuffer);
-    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, src, 0);
-    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_TexBuffer, 0);
-    glDrawBuffer(GL_COLOR_ATTACHMENT1);
-    glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+//     glCopyImageSubData(
+//         src, GL_TEXTURE_2D, 0, 0, 0, 0,
+//         m_TexBuffer, GL_TEXTURE_2D, 0, 0, 0, 0,
+//         width, height, 1);
+
+//    glBindFramebuffer(GL_FRAMEBUFFER, m_TempFrameBuffer);
+//    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, src, 0);
+//    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_TexBuffer, 0);
+//    glDrawBuffer(GL_COLOR_ATTACHMENT1);
+//    glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+}
+
+void* RenderAPI_OpenGLCoreES::GetCopiedTexture()
+{
+    return &m_TexBuffer;
 }
 
 #endif // #if SUPPORT_OPENGL_UNIFIED

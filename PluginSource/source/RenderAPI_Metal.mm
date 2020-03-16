@@ -29,7 +29,8 @@ public:
 
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
-    virtual void CopyTexture(void* source, int width, int height, void* destination);
+    virtual void CopyTexture(void* source, int width, int height);
+    virtual void* GetCopiedTexture();
 
 private:
 	void CreateResources();
@@ -255,9 +256,13 @@ void RenderAPI_Metal::EndModifyVertexBuffer(void* bufferHandle)
 #	endif // if UNITY_OSX
 }
 
-void RenderAPI_Metal::CopyTexture(void* source, int width, int height, void* destination)
+void RenderAPI_Metal::CopyTexture(void* source, int width, int height)
 {
-    source = destination;
+}
+
+void* RenderAPI_Metal::GetCopiedTexture()
+{
+    return NULL;
 }
 
 #endif // #if SUPPORT_METAL

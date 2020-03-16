@@ -48,7 +48,8 @@ public:
 	// End modifying vertex buffer data.
 	virtual void EndModifyVertexBuffer(void* bufferHandle) = 0;
     
-    virtual void CopyTexture(void* source, int width, int height, void* destination) = 0;
+    virtual void CopyTexture(void* source, int width, int height) = 0;
+    virtual void* GetCopiedTexture() = 0;
 };
 
 

@@ -17,6 +17,20 @@ public class UseRenderingPlugin : MonoBehaviour
 #else
 	[DllImport ("RenderingPlugin")]
 #endif
+	private static extern void SetRenderTextureFromUnity(System.IntPtr texture, int w, int h);
+	
+#if (UNITY_IOS || UNITY_TVOS || UNITY_WEBGL) && !UNITY_EDITOR
+	[DllImport ("__Internal")]
+#else
+	[DllImport ("RenderingPlugin")]
+#endif
+	private static extern System.IntPtr GetCopiedTexture();
+	
+#if (UNITY_IOS || UNITY_TVOS || UNITY_WEBGL) && !UNITY_EDITOR
+	[DllImport ("__Internal")]
+#else
+	[DllImport ("RenderingPlugin")]
+#endif
 	private static extern void SetTimeFromUnity(float t);
 
 
@@ -56,11 +70,24 @@ public class UseRenderingPlugin : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
 		RegisterPlugin();
 #endif
+		CreateRenderTextureAndPassToPlugin();
 		CreateTextureAndPassToPlugin();
 		SendMeshBuffersToPlugin();
-		yield return StartCoroutine("CallPluginAtEndOfFrames");
+		yield return StartCoroutine(CallPluginAtEndOfFrames());
 	}
 
+	[SerializeField] Renderer renderer;
+	Texture2D tex;
+	
+	private void CreateRenderTextureAndPassToPlugin()
+	{
+		RenderTexture renderTexture = new RenderTexture(256, 256, 1, RenderTextureFormat.ARGB32);
+		Camera.main.targetTexture = renderTexture;
+		SetRenderTextureFromUnity(renderTexture.GetNativeTexturePtr(), renderTexture.width, renderTexture.height);
+		tex = Texture2D.redTexture;
+		renderer.material.mainTexture = tex;
+	}
+	
 	private void CreateTextureAndPassToPlugin()
 	{
 		// Create a texture
@@ -126,6 +153,17 @@ public class UseRenderingPlugin : MonoBehaviour
 			// things it needs to do based on this ID.
 			// For our simple plugin, it does not matter which ID we pass here.
 			GL.IssuePluginEvent(GetRenderEventFunc(), 1);
+			
+			IntPtr ptr = GetCopiedTexture();
+
+			try
+			{
+				tex = Texture2D.CreateExternalTexture(256, 256, TextureFormat.RGBA32, false, true, ptr);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError(e);
+			}
 		}
 	}
 }
