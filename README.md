@@ -30,6 +30,7 @@ Native code rendering is implemented for several platforms and graphics APIs:
 * WebGL (OpenGL ES)
 * Android (OpenGL ES, Vulkan)
 * iOS/tvOS (Metal; Simulator is supported if you use unity 2020+ and XCode 11+)
+* EmbeddedLinux (OpenGL, Open GLES)
 * ...more platforms might be coming soon, we just did not get around to adding project files yet.
 
 Code is organized as follows:
@@ -40,6 +41,7 @@ Code is organized as follows:
 	* `projects/UWPVisualStudio2015`: Visual Studio 2015 project files for Windows Store (UWP - Win10) plugin
 	* `projects/Xcode`: Apple Xcode project file for Mac OS X plugin, Xcode 10.3 on macOS 10.14 was tested
 	* `projects/GNUMake`: Makefile for Linux
+	* `projects/EmbeddedLinux`: Windows .bat files to build plugins for different architectures
 * `UnityProject` is the Unity (2018.3.9 was tested) project.
 	* Single `scene` that contains the plugin sample scene.
 
