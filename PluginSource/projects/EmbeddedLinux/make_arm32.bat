@@ -1,0 +1,2 @@
+REM UNITY_ROOT should be set to folder with Unity repository
+"%UNITY_ROOT%/build/EmbeddedLinux/llvm/bin/clang++" --sysroot="%UNITY_ROOT%/build/EmbeddedLinux/sdk-linux-arm32/arm-embedded-linux-gnueabihf/sysroot" -DUNITY_EMBEDDED_LINUX=1 -O2 -fPIC -shared -rdynamic -o libRenderingPlugin.so -fuse-ld=lld.exe -Wl,-soname,RenderingPlugin -Wl,-lGLESv2 --gcc-toolchain="%UNITY_ROOT%/build/EmbeddedLinux/sdk-linux-arm32" -target arm-embedded-linux-gnueabihf ../../source/RenderingPlugin.cpp ../../source/RenderAPI_OpenGLCoreES.cpp ../../source/RenderAPI.cpp

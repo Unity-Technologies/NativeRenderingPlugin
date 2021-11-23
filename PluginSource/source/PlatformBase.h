@@ -14,6 +14,8 @@
 // UNITY_ANDROID - Android
 // UNITY_METRO - WSA or UWP
 // UNITY_WEBGL - WebGL
+// UNITY_EMBEDDED_LINUX - EmbeddedLinux OpenGLES
+// UNITY_EMBEDDED_LINUX_GL - EmbeddedLinux OpenGLCore
 #if _MSC_VER
 	#define UNITY_WIN 1
 #elif defined(__APPLE__)
@@ -26,7 +28,7 @@
 	#endif
 #elif defined(__ANDROID__)
 	#define UNITY_ANDROID 1
-#elif defined(UNITY_METRO) || defined(UNITY_LINUX) || defined(UNITY_WEBGL)
+#elif defined(UNITY_METRO) || defined(UNITY_LINUX) || defined(UNITY_WEBGL) || defined (UNITY_EMBEDDED_LINUX) || defined (UNITY_EMBEDDED_LINUX_GL)
 	// these are defined externally
 #elif defined(__EMSCRIPTEN__)
 	// this is already defined in Unity 5.6
@@ -49,7 +51,7 @@
 	#define SUPPORT_OPENGL_UNIFIED 1
 	#define SUPPORT_OPENGL_CORE 1
 	#define SUPPORT_VULKAN 0 // Requires Vulkan SDK to be installed
-#elif UNITY_IOS || UNITY_TVOS || UNITY_ANDROID || UNITY_WEBGL
+#elif UNITY_IOS || UNITY_TVOS || UNITY_ANDROID || UNITY_WEBGL || UNITY_EMBEDDED_LINUX
 	#ifndef SUPPORT_OPENGL_ES
 		#define SUPPORT_OPENGL_ES 1
 	#endif
@@ -57,7 +59,7 @@
 	#ifndef SUPPORT_VULKAN
 		#define SUPPORT_VULKAN 0
 	#endif
-#elif UNITY_OSX || UNITY_LINUX
+#elif UNITY_OSX || UNITY_LINUX || UNITY_EMBEDDED_LINUX_GL
 	#define SUPPORT_OPENGL_UNIFIED 1
 	#define SUPPORT_OPENGL_CORE 1
 #endif

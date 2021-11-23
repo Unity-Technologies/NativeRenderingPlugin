@@ -11,7 +11,7 @@
 #include <assert.h>
 #if UNITY_IOS || UNITY_TVOS
 #	include <OpenGLES/ES2/gl.h>
-#elif UNITY_ANDROID || UNITY_WEBGL
+#elif UNITY_ANDROID || UNITY_WEBGL || UNITY_EMBEDDED_LINUX
 #	include <GLES2/gl2.h>
 #elif UNITY_OSX
 #	include <OpenGL/gl3.h>
@@ -20,7 +20,7 @@
 // library (like GLEW, GLFW etc.) can be used; here we use gl3w since it's simple and
 // straightforward.
 #	include "gl3w/gl3w.h"
-#elif UNITY_LINUX
+#elif UNITY_LINUX || UNITY_EMBEDDED_LINUX_GL
 #	define GL_GLEXT_PROTOTYPES
 #	include <GL/gl.h>
 #else
