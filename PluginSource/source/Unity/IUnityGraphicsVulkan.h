@@ -100,7 +100,7 @@ enum UnityVulkanEventRenderPassPreCondition
     kUnityVulkanRenderPass_EnsureInside,
 
     // Make sure that there is currently no RenderPass in progress.
-	// This allows e.g. resource uploads.
+    // This allows e.g. resource uploads.
     // Ends the current render pass (and resumes it afterwards if needed)
     // If used in combination with the SRP RenderPass API the resuls is undefined.
     kUnityVulkanRenderPass_EnsureOutside
