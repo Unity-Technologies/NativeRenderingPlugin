@@ -132,7 +132,10 @@ static PFN_vkGetInstanceProcAddr UNITY_INTERFACE_API InterceptVulkanInitializati
 
 extern "C" void RenderAPI_Vulkan_OnPluginLoad(IUnityInterfaces* interfaces)
 {
-    interfaces->Get<IUnityGraphicsVulkan>()->InterceptInitialization(InterceptVulkanInitialization, NULL);
+    if (IUnityGraphicsVulkanV2* vulkanInterface = interfaces->Get<IUnityGraphicsVulkanV2>())
+        vulkanInterface->AddInterceptInitialization(InterceptVulkanInitialization, NULL, 0);
+    else if (IUnityGraphicsVulkan* vulkanInterface = interfaces->Get<IUnityGraphicsVulkan>())
+        vulkanInterface->InterceptInitialization(InterceptVulkanInitialization, NULL);
 }
 
 struct VulkanBuffer
