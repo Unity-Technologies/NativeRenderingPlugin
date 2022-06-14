@@ -11,7 +11,7 @@
 #include <assert.h>
 #if UNITY_IOS || UNITY_TVOS
 #	include <OpenGLES/ES2/gl.h>
-#elif UNITY_ANDROID || UNITY_WEBGL || UNITY_EMBEDDED_LINUX
+#elif UNITY_ANDROID || UNITY_WEBGL
 #	include <GLES2/gl2.h>
 #elif UNITY_OSX
 #	include <OpenGL/gl3.h>
@@ -20,9 +20,15 @@
 // library (like GLEW, GLFW etc.) can be used; here we use gl3w since it's simple and
 // straightforward.
 #	include "gl3w/gl3w.h"
-#elif UNITY_LINUX || UNITY_EMBEDDED_LINUX_GL
+#elif UNITY_LINUX
 #	define GL_GLEXT_PROTOTYPES
 #	include <GL/gl.h>
+#elif UNITY_EMBEDDED_LINUX
+#	include <GLES2/gl2.h>
+#if SUPPORT_OPENGL_CORE
+#	define GL_GLEXT_PROTOTYPES
+#	include <GL/gl.h>
+#endif
 #else
 #	error Unknown platform
 #endif
@@ -131,6 +137,8 @@ static GLuint CreateShader(GLenum type, const char* sourceText)
 
 void RenderAPI_OpenGLCoreES::CreateResources()
 {
+	while (glGetError() != GL_NO_ERROR) {}
+
 	// Create shaders
 	if (m_APIType == kUnityGfxRendererOpenGLES20)
 	{
