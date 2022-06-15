@@ -137,6 +137,7 @@ static GLuint CreateShader(GLenum type, const char* sourceText)
 
 void RenderAPI_OpenGLCoreES::CreateResources()
 {
+	// Make sure that there are no GL error flags set before creating resources
 	while (glGetError() != GL_NO_ERROR) {}
 
 	// Create shaders
