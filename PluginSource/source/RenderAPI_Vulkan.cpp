@@ -749,19 +749,14 @@ void* RenderAPI_Vulkan::BeginModifyVertexBuffer(void* bufferHandle, size_t* outB
     if (!bufferInfo.memory.mapped)
         return NULL;
 
-    UnityVulkanBuffer src;
-    if (!m_UnityVulkan->AccessBuffer(bufferHandle, VK_PIPELINE_STAGE_HOST_BIT, VK_ACCESS_HOST_READ_BIT, kUnityVulkanResourceAccess_PipelineBarrier, &src))
+    // We don't want to start modifying a resource that might still be used by the GPU,
+    // so we can use kUnityVulkanResourceAccess_Recreate to recreate it while still keeping the old one alive if it's in use.
+    UnityVulkanBuffer recreatedBuffer;
+    if (!m_UnityVulkan->AccessBuffer(bufferHandle, VK_PIPELINE_STAGE_HOST_BIT, VK_ACCESS_HOST_WRITE_BIT, kUnityVulkanResourceAccess_Recreate, &recreatedBuffer))
         return NULL;
 
-    UnityVulkanBuffer dst;
-    if (!m_UnityVulkan->AccessBuffer(bufferHandle, VK_PIPELINE_STAGE_HOST_BIT, VK_ACCESS_HOST_WRITE_BIT, kUnityVulkanResourceAccess_PipelineBarrier, &dst))
-        return NULL;
-        
-    // read might be slow because it's not cached
-    // can't use GPU transfer here because is not marked as transfer src
-    memcpy(dst.memory.mapped, src.memory.mapped, bufferInfo.sizeInBytes);
-
-    return dst.memory.mapped;
+    // We don't care about the previous contents of this vertex buffer so we can return the mapped pointer to the new resource memory 
+    return recreatedBuffer.memory.mapped;
 }
 
 void RenderAPI_Vulkan::EndModifyVertexBuffer(void* bufferHandle)
