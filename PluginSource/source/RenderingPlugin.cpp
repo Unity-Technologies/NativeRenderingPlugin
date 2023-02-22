@@ -262,6 +262,13 @@ static void ModifyVertexBuffer()
 		return;
 	int vertexStride = int(bufferSize / vertexCount);
 
+	// Unity should return us a buffer that is the size of `vertexCount * sizeof(MeshVertex)`
+	// If that's not the case then we should quit to avoid unexpected results.
+	// This can happen if https://docs.unity3d.com/ScriptReference/Mesh.GetNativeVertexBufferPtr.html returns
+	// a pointer to a buffer with an unexpected layout.
+	if (static_cast<unsigned int>(vertexStride) != sizeof(MeshVertex))
+		return;
+
 	const float t = g_Time * 3.0f;
 
 	char* bufferPtr = (char*)bufferDataPtr;
