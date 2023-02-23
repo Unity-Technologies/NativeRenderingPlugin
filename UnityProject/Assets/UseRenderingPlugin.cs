@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
-
+using UnityEngine.Rendering;
 
 public class UseRenderingPlugin : MonoBehaviour
 {
@@ -81,6 +81,19 @@ public class UseRenderingPlugin : MonoBehaviour
 	{
 		var filter = GetComponent<MeshFilter> ();
 		var mesh = filter.mesh;
+
+		// This is equivalent to MeshVertex in RenderingPlugin.cpp
+		var desiredVertexLayout = new[]
+		{
+			new VertexAttributeDescriptor(VertexAttribute.Position, VertexAttributeFormat.Float32, 3),
+			new VertexAttributeDescriptor(VertexAttribute.Normal, VertexAttributeFormat.Float32, 3),
+			new VertexAttributeDescriptor(VertexAttribute.Color, VertexAttributeFormat.Float32, 4),
+			new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float32, 2)
+		};
+
+		// Let's be certain we'll get the vertex buffer layout we want in native code
+		mesh.SetVertexBufferParams(mesh.vertexCount, desiredVertexLayout);
+
 		// The plugin will want to modify the vertex buffer -- on many platforms
 		// for that to work we have to mark mesh as "dynamic" (which makes the buffers CPU writable --
 		// by default they are immutable and only GPU-readable).
