@@ -9,9 +9,11 @@ patch_ndk_on_apple_m1() {
     if [ $os == "Darwin" -a $arch == "arm64" ]; then
         # Fix for building with NDK on Apple Silicon
         # https://stackoverflow.com/questions/69541831/unknown-host-cpu-architecture-arm64-android-ndk-siliconm1-apple-macbook-pro
+        if [ ! -f $UNITY_NDK/ndk-build.old ]; then
+            cp $UNITY_NDK/ndk-build $UNITY_NDK/ndk-build.old
+        fi
         echo '#!/bin/sh'                                         > $UNITY_NDK/ndk-build
         echo 'DIR="$(cd "$(dirname "$0")" && pwd)"'             >> $UNITY_NDK/ndk-build
-        echo '# $DIR/build/ndk-build "$@"'                      >> $UNITY_NDK/ndk-build
         echo 'arch -x86_64 /bin/bash $DIR/build/ndk-build "$@"' >> $UNITY_NDK/ndk-build
     fi
 }
