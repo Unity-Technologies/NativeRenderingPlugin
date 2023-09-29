@@ -22,8 +22,10 @@ The plugin itself does very few things:
 Native code rendering is implemented for several platforms and graphics APIs:
 
 * Windows (D3D11, D3D12, OpenGL, Vulkan)
-	* Note that Vulkan is not compiled in by default (requires Vulkan SDK); enable it by editing `#define SUPPORT_VULKAN 0`
+	* Note that Vulkan and DX12 are not compiled in by default
+	* Vulkan requires Vulkan SDK; enable it by editing `#define SUPPORT_VULKAN 0`
 	to `1` under `UNITY_WIN` clause in `PlatformBase.h`
+	* DX12 requires Agility SDK; enable it by editing `#define SUPPORT_D3D12 0` to `1` under `UNITY_WIN` clause in `PlatformBase.h`
 * macOS (Metal, OpenGL)
 * Linux (OpenGL, Vulkan)
 * Windows Store aka UWP (D3D11, D3D12)

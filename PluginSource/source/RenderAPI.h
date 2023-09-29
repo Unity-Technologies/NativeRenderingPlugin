@@ -6,7 +6,6 @@
 
 struct IUnityInterfaces;
 
-
 // Super-simple "graphics abstraction". This is nothing like how a proper platform abstraction layer would look like;
 // all this does is a base interface for whatever our plugin sample needs. Which is only "draw some triangles"
 // and "modify a texture" at this point.
@@ -47,6 +46,41 @@ public:
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize) = 0;
 	// End modifying vertex buffer data.
 	virtual void EndModifyVertexBuffer(void* bufferHandle) = 0;
+
+	// --------------------------------------------------------------------------
+	// DX12 plugin specific functions
+	// --------------------------------------------------------------------------
+
+	// Draws to a texture that is created by the plugin
+	virtual void drawToPluginTexture() {}
+
+	// Draws to a a unity RenderBuffer which can be set with
+	// setRenderTextureResource(). When the texture resource is not
+	// set with setRenderTextureResource() one is created by the plugin
+	virtual void drawToRenderTexture() {}
+
+	// Returns the native resource pointer to either unity render buffer or
+	// to the resource created by the plugin (i.e ID3D12Resource* in case of DX12)
+	virtual void* getRenderTexture() { return nullptr; }
+
+	// Sets the underlying resource to unity RenderBuffer 
+	// see https://docs.unity3d.com/ScriptReference/RenderBuffer.html
+	// setting rb to nullptr is used to signal the plugin that the 
+	// previously set RenderBuffer is no longer valid
+	virtual void setRenderTextureResource(UnityRenderBuffer rb) {}
+
+	// This should return true when the plugin is used with the unity player
+	// and false when the editor is used. The editor uses multiple swap
+	// chains (for each window) so instead of choosing one of them nullptr is returned.
+	virtual bool isSwapChainAvailable() { return false; };
+
+	// These require the swap chain to be available to be functional.
+	// When the swap chain is not available these simply return 0
+
+	virtual unsigned int getPresentFlags() { return 0; }
+	virtual unsigned int getSyncInterval() { return 0; }
+	virtual unsigned int getBackbufferWidth() { return 0;  }
+	virtual unsigned int getBackbufferHeight() { return 0; }
 };
 
 
