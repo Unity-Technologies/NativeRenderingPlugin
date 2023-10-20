@@ -90,11 +90,6 @@ static void UNITY_INTERFACE_API OnGraphicsDeviceEvent(UnityGfxDeviceEventType ev
 static IUnityInterfaces* s_UnityInterfaces = NULL;
 static IUnityGraphics* s_Graphics = NULL;
 
-IUnityInterfaces* get_unityintrfaces()
-{
-	return s_UnityInterfaces;
-}
-
 extern "C" void	UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
 {
 	s_UnityInterfaces = unityInterfaces;

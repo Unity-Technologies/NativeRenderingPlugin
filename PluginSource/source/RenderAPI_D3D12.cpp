@@ -399,6 +399,8 @@ private:
     // Wait on any user provided fence
     void wait_on_fence(UINT64 fence_value, ID3D12Fence* fence, HANDLE fence_event);
 
+    DXGI_FORMAT typeless_fmt_to_typed(DXGI_FORMAT format);
+
     typedef std::vector<D3D12MemoryObject>             D3D12Buffers;
     typedef std::map<unsigned long long, D3D12Buffers> DeleteQueue;
     typedef std::unordered_map<void*, void*>           MappedVertexBuffers;
@@ -1233,7 +1235,17 @@ void RenderAPI_D3D12::create_render_texture_rtv(ID3D12DescriptorHeap* heap, ID3D
 {
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtv_handle{ heap->GetCPUDescriptorHandleForHeapStart() };
     rtv_handle.Offset(offset, m_texture_rtv_desc_size);
-    s_d3d12->GetDevice()->CreateRenderTargetView(target, nullptr, rtv_handle);
+
+    D3D12_TEX2D_RTV rtv;
+    rtv.MipSlice = 0;
+    rtv.PlaneSlice = 0;
+
+    D3D12_RENDER_TARGET_VIEW_DESC desc;
+    desc.Format = typeless_fmt_to_typed(target->GetDesc().Format);
+    desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+    desc.Texture2D = rtv;
+
+    s_d3d12->GetDevice()->CreateRenderTargetView(target, &desc, rtv_handle);
 }
 
 void RenderAPI_D3D12::transition_barrier(ID3D12GraphicsCommandList* cmd, ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
@@ -1273,6 +1285,81 @@ void RenderAPI_D3D12::wait_on_fence(UINT64 fence_value, ID3D12Fence* fence, HAND
         handle_hr(fence->SetEventOnCompletion(fence_value, fence_event));
         WaitForSingleObject(fence_event, INFINITE);
     }
+}
+
+DXGI_FORMAT RenderAPI_D3D12::typeless_fmt_to_typed(DXGI_FORMAT format)
+{
+    switch (format)
+    {
+        case DXGI_FORMAT_R32G32B32A32_TYPELESS:
+            return DXGI_FORMAT_R32G32B32A32_UINT;
+
+        case DXGI_FORMAT_R32G32B32_TYPELESS:
+            return DXGI_FORMAT_R32G32B32_UINT;
+
+        case DXGI_FORMAT_R16G16B16A16_TYPELESS:
+            return DXGI_FORMAT_R16G16B16A16_UNORM;
+
+        case DXGI_FORMAT_R32G32_TYPELESS:
+            return DXGI_FORMAT_R32G32_UINT;
+
+        case DXGI_FORMAT_R32G8X24_TYPELESS:
+            return DXGI_FORMAT_X32_TYPELESS_G8X24_UINT;
+
+        case DXGI_FORMAT_R10G10B10A2_TYPELESS:
+            return DXGI_FORMAT_X32_TYPELESS_G8X24_UINT;
+
+        case DXGI_FORMAT_R8G8B8A8_TYPELESS:
+            return DXGI_FORMAT_R8G8B8A8_UNORM;
+
+        case DXGI_FORMAT_R16G16_TYPELESS:
+            return DXGI_FORMAT_R16G16_UNORM;
+
+        case DXGI_FORMAT_R32_TYPELESS:
+            return DXGI_FORMAT_R32_UINT;
+
+        case DXGI_FORMAT_R24G8_TYPELESS:
+            return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+
+        case DXGI_FORMAT_R8G8_TYPELESS:
+            return DXGI_FORMAT_R8G8_UNORM;
+
+        case DXGI_FORMAT_R16_TYPELESS:
+            return DXGI_FORMAT_R16_UNORM;
+
+        case DXGI_FORMAT_R8_TYPELESS:
+            return DXGI_FORMAT_R8_UNORM;
+
+        case DXGI_FORMAT_BC1_TYPELESS:
+            return DXGI_FORMAT_BC1_UNORM;
+
+        case DXGI_FORMAT_BC2_TYPELESS:
+            return DXGI_FORMAT_BC2_UNORM;
+
+        case DXGI_FORMAT_BC3_TYPELESS:
+            return DXGI_FORMAT_BC3_UNORM;
+        
+        case DXGI_FORMAT_BC4_TYPELESS:
+            return DXGI_FORMAT_BC4_UNORM;
+
+        case DXGI_FORMAT_BC5_TYPELESS:
+            return DXGI_FORMAT_BC5_UNORM;
+
+        case DXGI_FORMAT_B8G8R8A8_TYPELESS:
+            return DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+
+        case DXGI_FORMAT_B8G8R8X8_TYPELESS:
+            return DXGI_FORMAT_B8G8R8X8_UNORM_SRGB;
+
+        case DXGI_FORMAT_BC6H_TYPELESS:
+            return DXGI_FORMAT_BC6H_UF16;
+
+        case DXGI_FORMAT_BC7_TYPELESS:
+            return DXGI_FORMAT_BC7_UNORM;
+
+        default:
+            return format;
+     }
 }
 
 void* RenderAPI_D3D12::BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch)
