@@ -5,8 +5,7 @@ This sample demonstrates how to render and do other graphics related things from
 
 Unity versions:
 
-* **2018.1+** use tip of default branch.
-* 5.6, 5.5, 5.4: use corresponding `unity-x.x` tag.
+* **2023.1+** use tip of default branch.
 
 The plugin itself does very few things:
 
@@ -25,7 +24,7 @@ Native code rendering is implemented for several platforms and graphics APIs:
 	* Note that Vulkan and DX12 are not compiled in by default
 	* Vulkan requires Vulkan SDK; enable it by editing `#define SUPPORT_VULKAN 0`
 	to `1` under `UNITY_WIN` clause in `PlatformBase.h`
-	* DX12 requires Agility SDK; enable it by editing `#define SUPPORT_D3D12 0` to `1` under `UNITY_WIN` clause in `PlatformBase.h`
+	* DX12 requires additional header files (see on [github](https://github.com/microsoft/DirectX-Headers) or [nuget package](https://www.nuget.org/packages/Microsoft.Direct3D.D3D12/1.4.10)); enable it by editing `#define SUPPORT_D3D12 0` to `1` under `UNITY_WIN` clause in `PlatformBase.h`
 * macOS (Metal, OpenGL)
 * Linux (OpenGL, Vulkan)
 * Windows Store aka UWP (D3D11, D3D12)
@@ -39,12 +38,12 @@ Code is organized as follows:
 
 * `PluginSource` is source code & IDE project files for the C++ plugin.
  	* `source`: The source code itself. `RenderingPlugin.cpp` is the main logic, `RenderAPI*.*` files contain rendering implementations for different APIs.
-	* `projects/VisualStudio2015`: Visual Studio 2015 project files for regular Windows plugin
-	* `projects/UWPVisualStudio2015`: Visual Studio 2015 project files for Windows Store (UWP - Win10) plugin
+	* `projects/VisualStudio2022`: Visual Studio 2022 project files for regular Windows plugin
+	* `projects/UWPVisualStudio2022`: Visual Studio 2022 project files for Windows Store (UWP) plugin
 	* `projects/Xcode`: Apple Xcode project file for Mac OS X plugin, Xcode 10.3 on macOS 10.14 was tested
 	* `projects/GNUMake`: Makefile for Linux
 	* `projects/EmbeddedLinux`: Windows .bat files to build plugins for different architectures
-* `UnityProject` is the Unity (2018.3.9 was tested) project.
+* `UnityProject` is the Unity (2023.1.15f1 was tested) project.
 	* Single `scene` that contains the plugin sample scene.
 
 
