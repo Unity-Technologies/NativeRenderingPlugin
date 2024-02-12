@@ -82,7 +82,6 @@ extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetMeshBuffersFromUni
 }
 
 
-
 // --------------------------------------------------------------------------
 // UnitySetInterfaces
 
@@ -292,6 +291,15 @@ static void ModifyVertexBuffer()
 	s_CurrentAPI->EndModifyVertexBuffer(bufferHandle);
 }
 
+static void drawToPluginTexture()
+{
+	s_CurrentAPI->drawToPluginTexture();
+}
+
+static void drawToRenderTexture()
+{
+	s_CurrentAPI->drawToRenderTexture();
+}
 
 static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 {
@@ -299,11 +307,20 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 	if (s_CurrentAPI == NULL)
 		return;
 
-	DrawColoredTriangle();
-	ModifyTexturePixels();
-	ModifyVertexBuffer();
-}
+	if (eventID == 1)
+	{
+        drawToRenderTexture();
+        DrawColoredTriangle();
+        ModifyTexturePixels();
+        ModifyVertexBuffer();
+	}
 
+	if (eventID == 2)
+	{
+		drawToPluginTexture();
+	}
+
+}
 
 // --------------------------------------------------------------------------
 // GetRenderEventFunc, an example function we export which is used to get a rendering event callback function.
@@ -313,3 +330,41 @@ extern "C" UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetRen
 	return OnRenderEvent;
 }
 
+// --------------------------------------------------------------------------
+// DX12 plugin specific
+// --------------------------------------------------------------------------
+
+extern "C" UNITY_INTERFACE_EXPORT void* UNITY_INTERFACE_API GetRenderTexture()
+{
+	return s_CurrentAPI->getRenderTexture();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void UNITY_INTERFACE_API SetRenderTexture(UnityRenderBuffer rb)
+{
+	s_CurrentAPI->setRenderTextureResource(rb);
+}
+
+extern "C" UNITY_INTERFACE_EXPORT bool UNITY_INTERFACE_API IsSwapChainAvailable()
+{
+	return s_CurrentAPI->isSwapChainAvailable();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT unsigned int UNITY_INTERFACE_API GetPresentFlags()
+{
+	return s_CurrentAPI->getPresentFlags();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT unsigned int UNITY_INTERFACE_API GetSyncInterval()
+{
+	return s_CurrentAPI->getSyncInterval();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT unsigned int UNITY_INTERFACE_API GetBackBufferWidth()
+{
+	return s_CurrentAPI->getBackbufferHeight();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT unsigned int UNITY_INTERFACE_API GetBackBufferHeight()
+{
+	return s_CurrentAPI->getBackbufferWidth();
+}

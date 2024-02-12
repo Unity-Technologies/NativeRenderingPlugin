@@ -2,7 +2,6 @@
 #include "PlatformBase.h"
 #include "Unity/IUnityGraphics.h"
 
-
 RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 {
 #	if SUPPORT_D3D11
@@ -23,7 +22,7 @@ RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 
 
 #	if SUPPORT_OPENGL_UNIFIED
-	if (apiType == kUnityGfxRendererOpenGLCore || apiType == kUnityGfxRendererOpenGLES20 || apiType == kUnityGfxRendererOpenGLES30)
+	if (apiType == kUnityGfxRendererOpenGLCore || apiType == kUnityGfxRendererOpenGLES30)
 	{
 		extern RenderAPI* CreateRenderAPI_OpenGLCoreES(UnityGfxRenderer apiType);
 		return CreateRenderAPI_OpenGLCoreES(apiType);

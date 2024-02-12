@@ -145,7 +145,7 @@ void RenderAPI_OpenGLCoreES::CreateResources()
 	while (glGetError() != GL_NO_ERROR) {}
 
 	// Create shaders
-	if (m_APIType == kUnityGfxRendererOpenGLES20)
+	if (m_APIType == kUnityGfxRendererOpenGLES30)
 	{
 		m_VertexShader = CreateShader(GL_VERTEX_SHADER, kGlesVProgTextGLES2);
 		m_FragmentShader = CreateShader(GL_FRAGMENT_SHADER, kGlesFShaderTextGLES2);
