@@ -105,7 +105,9 @@ extern "C" void	UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnit
 #endif // SUPPORT_VULKAN
 
 	// Run OnGraphicsDeviceEvent(initialize) manually on plugin load
+#ifndef DEBUG //postponed to OnRenderEvent in debugMode, to have a valid GL_Context when dynamically loading the dll. Please make sure DEBUG preprocessor macro is defined in Debug configuration.
 	OnGraphicsDeviceEvent(kUnityGfxDeviceEventInitialize);
+#endif
 }
 
 extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()
@@ -132,15 +134,17 @@ extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API RegisterPlugin()
 static RenderAPI* s_CurrentAPI = NULL;
 static UnityGfxRenderer s_DeviceType = kUnityGfxRendererNull;
 
-
+static bool s_GraphicsInitialized = false;
 static void UNITY_INTERFACE_API OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType)
 {
+
 	// Create graphics API implementation upon initialization
 	if (eventType == kUnityGfxDeviceEventInitialize)
 	{
 		assert(s_CurrentAPI == NULL);
 		s_DeviceType = s_Graphics->GetRenderer();
 		s_CurrentAPI = CreateRenderAPI(s_DeviceType);
+		s_GraphicsInitialized = true;
 	}
 
 	// Let the implementation process the device related events
@@ -185,7 +189,7 @@ static void DrawColoredTriangle()
 	};
 
 	// Transformation matrix: rotate around Z axis based on time.
-	float phi = g_Time; // time set externally from Unity script
+	float phi = g_Time * 2.0f; // time set externally from Unity script
 	float cosPhi = cosf(phi);
 	float sinPhi = sinf(phi);
 	float depth = 0.7f;
@@ -303,10 +307,14 @@ static void drawToRenderTexture()
 
 static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 {
+#ifdef DEBUG //edit to make it possible to dynamically load the dll.
+	if (!s_GraphicsInitialized)
+		OnGraphicsDeviceEvent(kUnityGfxDeviceEventInitialize);
+#endif
 	// Unknown / unsupported graphics device type? Do nothing
 	if (s_CurrentAPI == NULL)
 		return;
-
+	
 	if (eventID == 1)
 	{
         drawToRenderTexture();
