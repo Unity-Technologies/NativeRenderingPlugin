@@ -19,3 +19,4 @@ UnityProject/Logs
 PluginSource/build
 PluginSource/projects/Android/libs/*
 PluginSource/projects/Android/obj/*
+PluginSource/source/*.o
