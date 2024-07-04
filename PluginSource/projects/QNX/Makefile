@@ -3,7 +3,7 @@
 UNITY_QNX_TARGET_LIB ?= $(QNX_TARGET)/aarch64le/usr/lib
 
 # UNITY_QNX_GLES2_LIB allows to link against a device/driver-specific library
-# e.g. for imx8qm, use "GLES2_viv"
+# e.g. for imx8qm, use "GLESv2_viv"
 UNITY_QNX_GLES2_LIB ?= GLESv2
 
 SRCDIR = ../../source
