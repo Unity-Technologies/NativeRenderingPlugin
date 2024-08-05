@@ -28,7 +28,7 @@
 	#endif
 #elif defined(__ANDROID__)
 	#define UNITY_ANDROID 1
-#elif defined(UNITY_METRO) || defined(UNITY_LINUX) || defined(UNITY_WEBGL) || defined (UNITY_EMBEDDED_LINUX) || defined (UNITY_EMBEDDED_LINUX_GL)
+#elif defined(UNITY_METRO) || defined(UNITY_LINUX) || defined(UNITY_WEBGL) || defined (UNITY_EMBEDDED_LINUX) || defined (UNITY_EMBEDDED_LINUX_GL) || defined (UNITY_QNX)
 	// these are defined externally
 #elif defined(__EMSCRIPTEN__)
 	// this is already defined in Unity 5.6
@@ -68,6 +68,9 @@
 	#ifndef SUPPORT_VULKAN
 		#define SUPPORT_VULKAN 0
 	#endif
+#elif UNITY_QNX
+	#define SUPPORT_OPENGL_UNIFIED 1
+	#define SUPPORT_OPENGL_ES 1
 #endif
 
 #if UNITY_IOS || UNITY_TVOS || UNITY_OSX

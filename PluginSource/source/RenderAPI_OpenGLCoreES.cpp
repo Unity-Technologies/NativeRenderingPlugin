@@ -29,6 +29,8 @@
 #	define GL_GLEXT_PROTOTYPES
 #	include <GL/gl.h>
 #endif
+#elif UNITY_QNX
+#	include <GLES2/gl2.h>
 #else
 #	error Unknown platform
 #endif
