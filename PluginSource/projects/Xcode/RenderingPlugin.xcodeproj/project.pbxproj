@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B6899B81CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899B01CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp */; };
 		2B6899B91CF8396700C4BA4F /* RenderAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899B11CF8396700C4BA4F /* RenderAPI.cpp */; };
 		2B6899BA1CF8396700C4BA4F /* RenderingPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899B31CF8396700C4BA4F /* RenderingPlugin.cpp */; };
 		2B6899C91CF83DB000C4BA4F /* RenderingPlugin.bundle in Copy Bundle into Unity project */ = {isa = PBXBuildFile; fileRef = 8D576316048677EA00EA77CD /* RenderingPlugin.bundle */; };
 		2B6899CB1CF8409A00C4BA4F /* RenderAPI_Metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2B6899CA1CF8409A00C4BA4F /* RenderAPI_Metal.mm */; };
-		2BC2A8D5144C433D00D5EF79 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */; };
+		8A0E9E8B3022106C005CEB36 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A0E9E8A3022106C005CEB36 /* Metal.framework */; };
 		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -33,9 +32,6 @@
 /* Begin PBXFileReference section */
 		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		2B6899AB1CF8396700C4BA4F /* PlatformBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlatformBase.h; path = ../../source/PlatformBase.h; sourceTree = "<group>"; };
-		2B6899AD1CF8396700C4BA4F /* RenderAPI_D3D11.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D11.cpp; path = ../../source/RenderAPI_D3D11.cpp; sourceTree = "<group>"; };
-		2B6899AE1CF8396700C4BA4F /* RenderAPI_D3D12.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D12.cpp; path = ../../source/RenderAPI_D3D12.cpp; sourceTree = "<group>"; };
-		2B6899B01CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_OpenGLCoreES.cpp; path = ../../source/RenderAPI_OpenGLCoreES.cpp; sourceTree = "<group>"; };
 		2B6899B11CF8396700C4BA4F /* RenderAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI.cpp; path = ../../source/RenderAPI.cpp; sourceTree = "<group>"; };
 		2B6899B21CF8396700C4BA4F /* RenderAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderAPI.h; path = ../../source/RenderAPI.h; sourceTree = "<group>"; };
 		2B6899B31CF8396700C4BA4F /* RenderingPlugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderingPlugin.cpp; path = ../../source/RenderingPlugin.cpp; sourceTree = "<group>"; };
@@ -46,7 +42,7 @@
 		2B6899C61CF839A600C4BA4F /* IUnityGraphicsMetal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityGraphicsMetal.h; path = ../../source/Unity/IUnityGraphicsMetal.h; sourceTree = "<group>"; };
 		2B6899C71CF839A600C4BA4F /* IUnityInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityInterface.h; path = ../../source/Unity/IUnityInterface.h; sourceTree = "<group>"; };
 		2B6899CA1CF8409A00C4BA4F /* RenderAPI_Metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RenderAPI_Metal.mm; path = ../../source/RenderAPI_Metal.mm; sourceTree = "<group>"; };
-		2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		8A0E9E8A3022106C005CEB36 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		8D576316048677EA00EA77CD /* RenderingPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RenderingPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,8 +52,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A0E9E8B3022106C005CEB36 /* Metal.framework in Frameworks */,
 				8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */,
-				2BC2A8D5144C433D00D5EF79 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +67,7 @@
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
 				19C28FB6FE9D52B211CA2CBB /* Products */,
+				8A0E9E893022106C005CEB36 /* Frameworks */,
 			);
 			name = RenderingPlugin;
 			sourceTree = "<group>";
@@ -79,7 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */,
-				2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -97,10 +93,7 @@
 			children = (
 				2B6899BC1CF8398200C4BA4F /* Unity */,
 				2B6899AB1CF8396700C4BA4F /* PlatformBase.h */,
-				2B6899AD1CF8396700C4BA4F /* RenderAPI_D3D11.cpp */,
-				2B6899AE1CF8396700C4BA4F /* RenderAPI_D3D12.cpp */,
 				2B6899CA1CF8409A00C4BA4F /* RenderAPI_Metal.mm */,
-				2B6899B01CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp */,
 				2B6899B11CF8396700C4BA4F /* RenderAPI.cpp */,
 				2B6899B21CF8396700C4BA4F /* RenderAPI.h */,
 				2B6899B31CF8396700C4BA4F /* RenderingPlugin.cpp */,
@@ -127,6 +120,14 @@
 				2B6899C71CF839A600C4BA4F /* IUnityInterface.h */,
 			);
 			name = Unity;
+			sourceTree = "<group>";
+		};
+		8A0E9E893022106C005CEB36 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A0E9E8A3022106C005CEB36 /* Metal.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,7 +195,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B6899BA1CF8396700C4BA4F /* RenderingPlugin.cpp in Sources */,
-				2B6899B81CF8396700C4BA4F /* RenderAPI_OpenGLCoreES.cpp in Sources */,
 				2B6899B91CF8396700C4BA4F /* RenderAPI.cpp in Sources */,
 				2B6899CB1CF8409A00C4BA4F /* RenderAPI_Metal.mm in Sources */,
 			);
@@ -214,9 +214,10 @@
 				HEADER_SEARCH_PATHS = ../;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:rfc1034Identifier}";
 				PRODUCT_NAME = RenderingPlugin;
-				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -231,9 +232,10 @@
 				HEADER_SEARCH_PATHS = ../;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:rfc1034Identifier}";
 				PRODUCT_NAME = RenderingPlugin;
-				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
@@ -244,8 +246,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ENABLE_TESTABILITY = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				ONLY_ACTIVE_ARCH = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SYMROOT = ../../build;
 			};
@@ -255,9 +257,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = macosx;
 				SYMROOT = ../../build;
+				ONLY_ACTIVE_ARCH = NO;
 			};
 			name = Release;
 		};

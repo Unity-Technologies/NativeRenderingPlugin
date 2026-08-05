@@ -142,7 +142,6 @@ void RenderAPI_Metal::CreateResources()
 	pipeDesc.depthAttachmentPixelFormat		= MTLPixelFormatDepth32Float_Stencil8;
 	pipeDesc.stencilAttachmentPixelFormat	= MTLPixelFormatDepth32Float_Stencil8;
 
-	pipeDesc.sampleCount = 1;
 	pipeDesc.colorAttachments[0].blendingEnabled = NO;
 
 	pipeDesc.vertexFunction		= vertexFunction;
@@ -199,8 +198,10 @@ void RenderAPI_Metal::DrawSimpleTriangles(const float worldMatrix[16], int trian
 	::memcpy(m_ConstantBuffer.contents, worldMatrix, cbSize);
 
 #if UNITY_OSX
-	[m_VertexBuffer didModifyRange:NSMakeRange(0, vbSize)];
-	[m_ConstantBuffer didModifyRange:NSMakeRange(0, cbSize)];
+	if (m_VertexBuffer.storageMode == MTLStorageModeManaged)
+		[m_VertexBuffer didModifyRange:NSMakeRange(0, vbSize)];
+	if (m_ConstantBuffer.storageMode == MTLStorageModeManaged)
+		[m_ConstantBuffer didModifyRange:NSMakeRange(0, cbSize)];
 #endif
 
 	id<MTLRenderCommandEncoder> cmd = (id<MTLRenderCommandEncoder>)m_MetalGraphics->CurrentCommandEncoder();
@@ -250,7 +251,8 @@ void RenderAPI_Metal::EndModifyVertexBuffer(void* bufferHandle)
 {
 #	if UNITY_OSX
 	id<MTLBuffer> buf = (__bridge id<MTLBuffer>)bufferHandle;
-	[buf didModifyRange:NSMakeRange(0, buf.length)];
+	if (buf.storageMode == MTLStorageModeManaged)
+		[buf didModifyRange:NSMakeRange(0, buf.length)];
 #	endif // if UNITY_OSX
 }
 
