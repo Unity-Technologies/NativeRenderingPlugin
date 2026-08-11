@@ -40,7 +40,12 @@ class RenderAPI_OpenGLCoreES : public RenderAPI
 {
 public:
 	RenderAPI_OpenGLCoreES(UnityGfxRenderer apiType);
-	virtual ~RenderAPI_OpenGLCoreES() { }
+	virtual ~RenderAPI_OpenGLCoreES() 
+	{
+#	if SUPPORT_OPENGL_ES
+	if(m_VertexBufferPtr!=nullptr) free(m_VertexBufferPtr);
+#	endif
+	}
 
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 
@@ -66,6 +71,10 @@ private:
 	GLuint m_VertexBuffer;
 	int m_UniformWorldMatrix;
 	int m_UniformProjMatrix;
+#	if SUPPORT_OPENGL_ES
+	void* m_VertexBufferPtr;
+	size_t m_VertexBufferPtrSize;
+#	endif
 };
 
 
@@ -290,13 +299,20 @@ void RenderAPI_OpenGLCoreES::EndModifyTexture(void* textureHandle, int textureWi
 
 void* RenderAPI_OpenGLCoreES::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)
 {
-#	if SUPPORT_OPENGL_ES
-	return 0;
-#	else
 	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
 	GLint size = 0;
 	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
 	*outBufferSize = size;
+#	if SUPPORT_OPENGL_ES
+	if(m_VertexBufferPtrSize!=size && m_VertexBufferPtr!=nullptr) 
+	{
+		free(m_VertexBufferPtr); 
+		m_VertexBufferPtr=nullptr; 
+	}
+	m_VertexBufferPtr = (m_VertexBufferPtr==nullptr)?malloc(size):m_VertexBufferPtr;
+	m_VertexBufferPtrSize = size;
+	return m_VertexBufferPtr;
+#	else
 	void* mapped = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 	return mapped;
 #	endif
@@ -305,7 +321,9 @@ void* RenderAPI_OpenGLCoreES::BeginModifyVertexBuffer(void* bufferHandle, size_t
 
 void RenderAPI_OpenGLCoreES::EndModifyVertexBuffer(void* bufferHandle)
 {
-#	if !SUPPORT_OPENGL_ES
+#	if SUPPORT_OPENGL_ES
+	glBufferSubData(GL_ARRAY_BUFFER,0,m_VertexBufferPtrSize,m_VertexBufferPtr);
+#	else
 	glBindBuffer(GL_ARRAY_BUFFER, (GLuint)(size_t)bufferHandle);
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 #	endif
