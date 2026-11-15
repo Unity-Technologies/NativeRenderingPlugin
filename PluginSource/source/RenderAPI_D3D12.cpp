@@ -1367,8 +1367,12 @@ void* RenderAPI_D3D12::BeginModifyTexture(void* textureHandle, int textureWidth,
     wait_for_unity_frame_fence(m_texture_copy_fence);
 
     // Fill data
-    // Clamp to minimum rowPitch of RGBA32
-    *outRowPitch = static_cast<int>(max(align_pow2(textureWidth * 4), 256));
+    // Use the same row pitch as the placed footprint that EndModifyTexture copies from
+    ID3D12Resource* resource = (ID3D12Resource*)textureHandle;
+    D3D12_RESOURCE_DESC desc = resource->GetDesc();
+    D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint = {};
+    s_d3d12->GetDevice()->GetCopyableFootprints(&desc, 0, 1, 0, &footprint, nullptr, nullptr, nullptr);
+    *outRowPitch = static_cast<int>(footprint.Footprint.RowPitch);
     const UINT64 kDataSize = get_aligned_size(textureWidth, textureHeight, 4, *outRowPitch);
     if (!get_upload_resource(&s_upload_texture, kDataSize, D3D12_UPLOAD_HEAP_TEXTURE_BUFFER_NAME))
         return NULL;
